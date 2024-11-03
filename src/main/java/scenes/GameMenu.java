@@ -62,6 +62,7 @@ public class GameMenu extends GameScene implements SceneMethods{
 
     public void mouseMoved(int x, int y) {
         bPlaying.setMouseOver(false);
+        bEdit.setMouseOver(false);
         bSetting.setMouseOver(false);
         bQuit.setMouseOver(false);
         if (bPlaying.getBounds().contains(x, y)){

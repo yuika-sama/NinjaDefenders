@@ -1,8 +1,10 @@
 package com.mycompany.towerdefense;
 
 
+import helpz.LoadSave;
 import input.MyKeyboardListener;
 import input.MyMouseListener;
+import managers.TileManager;
 import scenes.Editing;
 import scenes.Playing;
 import scenes.Setting;
@@ -23,12 +25,14 @@ public class Game extends JFrame implements Runnable{
     private Playing playing;
     private Setting setting;
     private Editing editing;
+    private TileManager tileManager;
 
     public Game() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
 
         initClasses();
+        createDefaultLevel();
 
         add(gameScreen);
         pack();
@@ -37,7 +41,16 @@ public class Game extends JFrame implements Runnable{
         setVisible(true);
     }
 
+    private void createDefaultLevel() {
+        int[] arr = new int[400];
+        for (int i=0; i<arr.length; i++){
+            arr[i] = 0;
+        }
+        LoadSave.CreateLevel("new level", arr);
+    }
+
     private void initClasses() {
+        tileManager = new TileManager();
         render = new Render(this);
         gameScreen = new GameScreen(this);
         playing = new Playing(this);
@@ -114,5 +127,9 @@ public class Game extends JFrame implements Runnable{
     }
     public Editing getEditor() {
         return editing;
+    }
+
+    public TileManager getTileManager() {
+        return tileManager;
     }
 }
