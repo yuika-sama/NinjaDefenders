@@ -2,18 +2,16 @@ package com.mycompany.towerdefense;
 
 
 import helpz.LoadSave;
-import input.MyKeyboardListener;
-import input.MyMouseListener;
 import managers.TileManager;
 import scenes.Editing;
+import scenes.GameMenu;
 import scenes.Playing;
 import scenes.Setting;
-import scenes.GameMenu;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 
-public class Game extends JFrame implements Runnable{
+public class Game extends JFrame implements Runnable {
     private final double UPS_SET = 60.0;
     private final double FPS_SET = 120.0;
     private BufferedImage img;
@@ -41,12 +39,19 @@ public class Game extends JFrame implements Runnable{
         setVisible(true);
     }
 
+    public static void main(String[] args) {
+        System.out.println("Hello there");
+        Game game = new Game();
+        game.gameScreen.initInput();
+        game.start();
+    }
+
     private void createDefaultLevel() {
         int[] arr = new int[400];
-        for (int i=0; i<arr.length; i++){
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = 0;
         }
-        LoadSave.CreateLevel("new level", arr);
+//        LoadSave.CreateLevel("new level", arr);
     }
 
     private void initClasses() {
@@ -59,15 +64,9 @@ public class Game extends JFrame implements Runnable{
         editing = new Editing(this);
     }
 
-    public static void main(String[] args){
-        System.out.println("Hello there");
-        Game game = new Game();
-        game.gameScreen.initInput();
-        game.start();
-    }
-
     private void start() {
-        Thread gameThread = new Thread(this){};
+        Thread gameThread = new Thread(this) {
+        };
         gameThread.start();
     }
 
@@ -84,7 +83,7 @@ public class Game extends JFrame implements Runnable{
         int frames = 0;
         int updates = 0;
         long now;
-        while(true){
+        while (true) {
             //render
             now = System.nanoTime();
             if (now - lastFrame >= timePerFrame) {
@@ -93,13 +92,13 @@ public class Game extends JFrame implements Runnable{
                 frames++;
             }
             //update
-            if (now - lastUpdate >= timePerUpdate){
+            if (now - lastUpdate >= timePerUpdate) {
                 updateGame();
                 lastUpdate = System.nanoTime();
                 updates++;
             }
 
-            if (System.currentTimeMillis() - lastTimeCheck >= 1000){
+            if (System.currentTimeMillis() - lastTimeCheck >= 1000) {
                 System.out.println("FPS: " + frames + " | UPS: " + updates);
                 frames = 0;
                 updates = 0;
@@ -107,10 +106,12 @@ public class Game extends JFrame implements Runnable{
             }
         }
     }
-    private void updateGame(){
+
+    private void updateGame() {
         //do nothing
     }
-    public Render getRender(){
+
+    public Render getRender() {
         return render;
     }
 
@@ -125,6 +126,7 @@ public class Game extends JFrame implements Runnable{
     public Setting getSetting() {
         return setting;
     }
+
     public Editing getEditor() {
         return editing;
     }

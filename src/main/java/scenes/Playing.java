@@ -7,13 +7,13 @@ import ui.ActionBar;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Playing extends GameScene implements SceneMethods{
+public class Playing extends GameScene implements SceneMethods {
     private int[][] lvl;
-    private ActionBar actionBar;
+    private final ActionBar actionBar;
 
     private int mouseX, mouseY;
 
-    private Game game;
+    private final Game game;
 
     public Playing(Game game) {
         super(game);
@@ -26,22 +26,22 @@ public class Playing extends GameScene implements SceneMethods{
         lvl = LoadSave.GetLevelData("new_level");
     }
 
-    public void setLevel(int[][] lvl){
+    public void setLevel(int[][] lvl) {
         this.lvl = lvl;
     }
 
     @Override
     public void render(Graphics g) {
-        for (int y=0; y<lvl.length; y++){
-            for (int x = 0; x < lvl[y].length; x++){
+        for (int y = 0; y < lvl.length; y++) {
+            for (int x = 0; x < lvl[y].length; x++) {
                 int id = lvl[y][x];
-                g.drawImage(getSprite(id),x*32 , y*32, null);
+                g.drawImage(getSprite(id), x * 32, y * 32, null);
             }
         }
         actionBar.draw(g);
     }
 
-    private BufferedImage getSprite(int spriteId){
+    private BufferedImage getSprite(int spriteId) {
         return game.getTileManager().getSprite(spriteId);
     }
 

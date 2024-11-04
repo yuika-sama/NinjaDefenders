@@ -3,9 +3,15 @@ package objects;
 import java.awt.image.BufferedImage;
 
 public class Tile {
-    private BufferedImage sprite;
-    private String name;
-    private int id;
+    private final BufferedImage sprite;
+    private final String name;
+    private final int id;
+
+    public Tile(BufferedImage sprite, int id, String name) {
+        this.sprite = sprite;
+        this.id = id;
+        this.name = name;
+    }
 
     public String getName() {
         return name;
@@ -15,13 +21,7 @@ public class Tile {
         return id;
     }
 
-    public Tile(BufferedImage sprite, int id, String name) {
-        this.sprite = sprite;
-        this.id = id;
-        this.name = name;
-    }
-
-    public BufferedImage getSprite(){
+    public BufferedImage getSprite() {
         return sprite;
     }
 

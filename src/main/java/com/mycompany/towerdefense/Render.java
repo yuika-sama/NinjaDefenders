@@ -3,13 +3,14 @@ package com.mycompany.towerdefense;
 import java.awt.*;
 
 public class Render {
-    private Game game;
-    public Render(Game game){
+    private final Game game;
+
+    public Render(Game game) {
         this.game = game;
     }
 
-    public void render(Graphics g){
-        switch (GameState.gameStates){
+    public void render(Graphics g) {
+        switch (GameState.gameStates) {
             case MENU:
                 this.game.getMenu().render(g);
                 break;

@@ -5,7 +5,7 @@ import java.awt.*;
 public class MyButton {
 
     public int x, y, width, height, id;
-    private String text;
+    private final String text;
 
     private Rectangle bounds;
     private boolean mouseOver, mousePressed;
@@ -38,11 +38,11 @@ public class MyButton {
         return id;
     }
 
-    private void initBounds(){
+    private void initBounds() {
         this.bounds = new Rectangle(x, y, width, height);
     }
 
-    public void draw(Graphics g){
+    public void draw(Graphics g) {
         //body
         drawBody(g);
 
@@ -54,11 +54,11 @@ public class MyButton {
     }
 
     private void drawBorder(Graphics g) {
-        if (mousePressed){
+        if (mousePressed) {
             g.setColor(Color.BLACK);
             g.drawRect(x, y, width, height);
-            g.drawRect(x+1, y+1, width - 2, height - 2);
-            g.drawRect(x+2, y+2, width - 4, height -4);
+            g.drawRect(x + 1, y + 1, width - 2, height - 2);
+            g.drawRect(x + 2, y + 2, width - 4, height - 4);
         } else {
             g.setColor(Color.BLACK);
             g.drawRect(x, y, width, height);
@@ -67,7 +67,7 @@ public class MyButton {
     }
 
     private void drawBody(Graphics g) {
-        if (mouseOver){
+        if (mouseOver) {
             g.setColor(Color.GRAY);
         } else {
             g.setColor(Color.WHITE);
@@ -78,32 +78,32 @@ public class MyButton {
     private void drawText(Graphics g) {
         int w = g.getFontMetrics().stringWidth(text);
         int h = g.getFontMetrics().getHeight();
-        g.drawString(text, x - w/2 + width/2, y + h/2 + height/2);
+        g.drawString(text, x - w / 2 + width / 2, y + h / 2 + height / 2);
     }
 
-    public void resetBooleans(){
+    public void resetBooleans() {
         this.mouseOver = false;
         this.mousePressed = false;
-    }
-
-    public void setMouseOver(boolean mouseOver){
-        this.mouseOver = mouseOver;
     }
 
     public Rectangle getBounds() {
         return bounds;
     }
 
-    public void setMousePressed(boolean mousePressed) {
-        this.mousePressed = mousePressed;
-    }
-
-    public boolean isMouseOver(){
+    public boolean isMouseOver() {
         return mouseOver;
     }
 
-    public boolean isMousePressed(){
+    public void setMouseOver(boolean mouseOver) {
+        this.mouseOver = mouseOver;
+    }
+
+    public boolean isMousePressed() {
         return mousePressed;
+    }
+
+    public void setMousePressed(boolean mousePressed) {
+        this.mousePressed = mousePressed;
     }
 
 }

@@ -6,18 +6,18 @@ import objects.Tile;
 import ui.ToolBar;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-public class Editing extends GameScene implements SceneMethods{
-    private int[][] lvl;
+public class Editing extends GameScene implements SceneMethods {
     private final ToolBar toolBar;
-
+    private final Game game;
+    private int[][] lvl;
     private Tile selectedTile;
     private int mouseX, mouseY;
     private boolean drawSelected;
-
     private int lastTileX, lastTileY, lastTileID;
-    private Game game;
 
 
     public Editing(Game game) {
@@ -31,16 +31,16 @@ public class Editing extends GameScene implements SceneMethods{
         lvl = LoadSave.GetLevelData("new_level");
     }
 
-    private void drawLevel(Graphics g){
-        for (int y=0; y<lvl.length; y++){
-            for (int x = 0; x < lvl[y].length; x++){
+    private void drawLevel(Graphics g) {
+        for (int y = 0; y < lvl.length; y++) {
+            for (int x = 0; x < lvl[y].length; x++) {
                 int id = lvl[y][x];
-                g.drawImage(getSprite(id),x*32 , y*32, null);
+                g.drawImage(getSprite(id), x * 32, y * 32, null);
             }
         }
     }
 
-    private BufferedImage getSprite(int spriteId){
+    private BufferedImage getSprite(int spriteId) {
         return game.getTileManager().getSprite(spriteId);
     }
 
@@ -52,8 +52,8 @@ public class Editing extends GameScene implements SceneMethods{
     }
 
     private void drawSelectedTile(Graphics g) {
-        if (selectedTile!=null && drawSelected){
-            g.drawImage(selectedTile.getSprite(), mouseX, mouseY,32, 32, null);
+        if (selectedTile != null && drawSelected) {
+            g.drawImage(selectedTile.getSprite(), mouseX, mouseY, 32, 32, null);
 
         }
     }
@@ -63,20 +63,16 @@ public class Editing extends GameScene implements SceneMethods{
         drawSelected = true;
     }
 
-    public void saveLevel(){
+    public void saveLevel() {
         LoadSave.SaveLevel("new_level", lvl);
         game.getPlaying().setLevel(lvl);
     }
 
     private void changeTile(int x, int y) {
-        if (x < 0 || y < 0 || x > 640 || y > 640)
-            return;
-        if (selectedTile!=null){
-            int tileX = x/32, tileY =y/32;
-            if (lastTileX == tileX &&
-                lastTileY == tileY &&
-                lastTileID == selectedTile.getId())
-                return;
+        if (x < 0 || y < 0 || x > 640 || y > 640) return;
+        if (selectedTile != null) {
+            int tileX = x / 32, tileY = y / 32;
+            if (lastTileX == tileX && lastTileY == tileY && lastTileID == selectedTile.getId()) return;
             lastTileY = tileY;
             lastTileX = tileX;
             lastTileID = selectedTile.getId();
@@ -107,16 +103,37 @@ public class Editing extends GameScene implements SceneMethods{
 
     @Override
     public void mousePressed(int x, int y) {
+        if (y >= 640) {
+            toolBar.mousePressed(x, y);
+        }
     }
 
     @Override
     public void mouseReleased(int x, int y) {
+        if (y >= 640) {
+            toolBar.mouseReleased(x, y);
+        }
     }
 
     @Override
     public void mouseDragged(int x, int y) {
         if (y < 640) {
             changeTile(x, y);
+        }
+    }
+
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_R) {
+//            toolBar.rotateSprite();
+//            System.out.println("Lol don't try. I closed this method");
+        }
+    }
+
+    public void mouseClicked(MouseEvent e, int x, int y) {
+        if (e.getButton() == MouseEvent.BUTTON3){
+            if (y < 640){
+                toolBar.rotateSprite();
+            }
         }
     }
 }

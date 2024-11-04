@@ -5,9 +5,10 @@ import ui.MyButton;
 
 import java.awt.*;
 
-import static com.mycompany.towerdefense.GameState.*;
+import static com.mycompany.towerdefense.GameState.MENU;
+import static com.mycompany.towerdefense.GameState.setGameStates;
 
-public class Setting extends GameScene implements SceneMethods{
+public class Setting extends GameScene implements SceneMethods {
     private MyButton bMenu;
 
     public Setting(Game game) {
@@ -22,27 +23,27 @@ public class Setting extends GameScene implements SceneMethods{
     @Override
     public void render(Graphics g) {
         g.setColor(Color.BLUE);
-        g.fillRect(0,0,640,640);
+        g.fillRect(0, 0, 640, 640);
         drawButton(g);
     }
 
     @Override
     public void mouseClicked(int x, int y) {
-        if (bMenu.getBounds().contains(x, y)){
+        if (bMenu.getBounds().contains(x, y)) {
             setGameStates(MENU);
         }
     }
 
     public void mouseMoved(int x, int y) {
         bMenu.setMouseOver(false);
-        if (bMenu.getBounds().contains(x, y)){
+        if (bMenu.getBounds().contains(x, y)) {
             bMenu.setMouseOver(true);
         }
     }
 
     @Override
     public void mousePressed(int x, int y) {
-        if (bMenu.getBounds().contains(x, y)){
+        if (bMenu.getBounds().contains(x, y)) {
             bMenu.setMousePressed(true);
         }
     }

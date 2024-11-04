@@ -38,7 +38,6 @@ public class LoadSave {
         File newLevel = new File(folderPath + name + ".txt");
         if (newLevel.exists()) {
             System.out.println("File " + name + " already exists");
-            return;
         } else {
             try {
                 if (newLevel.createNewFile()) {
@@ -63,14 +62,13 @@ public class LoadSave {
         }
     }
 
-    public static void SaveLevel(String name, int[][] idArr){
+    public static void SaveLevel(String name, int[][] idArr) {
         File txtFile = new File(folderPath + name + ".txt");
-        if (txtFile.exists()){
+        if (txtFile.exists()) {
             WriteToFile(txtFile, Utils._2DIntTo1DInt(idArr));
             System.out.println("Saved");
         } else {
             System.out.println(name + ".txt is not exists");
-            return;
         }
     }
 

@@ -1,8 +1,5 @@
 package ui;
 
-import objects.Tile;
-import scenes.Playing;
-
 public class Bar {
     protected int x, y, width, height;
 
@@ -12,7 +9,6 @@ public class Bar {
         this.width = width;
         this.height = height;
     }
-
 
 
 }

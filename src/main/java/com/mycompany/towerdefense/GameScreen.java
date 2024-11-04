@@ -7,13 +7,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameScreen extends JPanel {
-    private Game game;
+    private final Game game;
     private Dimension dms;
     private MyMouseListener myMouseListener;
     private MyKeyboardListener myKeyboardListener;
 
-    public GameScreen(Game game){
-        this.game  = game;
+    public GameScreen(Game game) {
+        this.game = game;
         setPanelSize();
     }
 
@@ -24,9 +24,9 @@ public class GameScreen extends JPanel {
         setMaximumSize(dms);
     }
 
-    public void initInput(){
+    public void initInput() {
         myMouseListener = new MyMouseListener(game);
-        myKeyboardListener = new MyKeyboardListener();
+        myKeyboardListener = new MyKeyboardListener(game);
 
         addMouseListener(myMouseListener);
         addMouseMotionListener(myMouseListener);
