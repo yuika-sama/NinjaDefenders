@@ -18,6 +18,8 @@ public class Editing extends GameScene implements SceneMethods {
     private int mouseX, mouseY;
     private boolean drawSelected;
     private int lastTileX, lastTileY, lastTileID;
+    private int animId;
+    private int tick;
 
 
     public Editing(Game game) {
@@ -35,20 +37,43 @@ public class Editing extends GameScene implements SceneMethods {
         for (int y = 0; y < lvl.length; y++) {
             for (int x = 0; x < lvl[y].length; x++) {
                 int id = lvl[y][x];
-                g.drawImage(getSprite(id), x * 32, y * 32, null);
+                if (isAnim(id)){
+                    g.drawImage(getSprite(id, animId), x * 32, y * 32, null);
+                } else
+                    g.drawImage(getSprite(id), x * 32, y * 32, null);
             }
         }
+    }
+
+    private boolean isAnim(int id) {
+        return game.getTileManager().isAnim(id);
     }
 
     private BufferedImage getSprite(int spriteId) {
         return game.getTileManager().getSprite(spriteId);
     }
 
+    private BufferedImage getSprite(int spriteId, int animId) {
+        return game.getTileManager().getAnimSprite(spriteId, animId);
+    }
+
     @Override
     public void render(Graphics g) {
-        toolBar.draw(g);
+        updateTick();
         drawLevel(g);
+        toolBar.draw(g);
         drawSelectedTile(g);
+    }
+
+    private void updateTick() {
+        tick++;
+        if (tick >= 25){
+            tick = 0;
+            animId++;
+            if (animId >= 4){
+                animId = 0;
+            }
+        }
     }
 
     private void drawSelectedTile(Graphics g) {

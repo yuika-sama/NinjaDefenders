@@ -3,6 +3,7 @@ package managers;
 import helpz.ImgFix;
 import helpz.LoadSave;
 import objects.Tile;
+import ui.Bar;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -31,17 +32,17 @@ public class TileManager {
         int id = 0;
         //Default
         tiles.add(GRASS = new Tile(getSprite(9, 0), id++, "Grass"));
-        tiles.add(WATER = new Tile(getSprite(0, 0), id++, "Water"));
+        tiles.add(WATER = new Tile(getAnimSprites(0, 0), id++, "Water"));
         //Water
         beaches.add(T_WATER = new Tile(ImgFix.buildImg(getImgs(0, 0, 6, 0)), id++, "T_Water"));
         beaches.add(R_WATER = new Tile(ImgFix.getRotImg(getSprite(6, 0), 90), id++, "R_Water"));
         beaches.add(B_WATER = new Tile(ImgFix.getRotImg(getSprite(6, 0), 180), id++, "B_Water"));
         beaches.add(L_WATER = new Tile(ImgFix.getRotImg(getSprite(6, 0), 270), id++, "L_Water"));
         //Water corner
-        corners.add(BL_WATER_CORNER = new Tile(ImgFix.buildImg(getImgs(0, 0, 5, 0)), id++, "Bl_Water_Corner"));
-        corners.add(TL_WATER_CORNER = new Tile(ImgFix.getBuildRotImg(getImgs(0, 0, 5, 0), 90, 1), id++, "Tl_Water_Corner"));
-        corners.add(TR_WATER_CORNER = new Tile(ImgFix.getBuildRotImg(getImgs(0, 0, 5, 0), 180, 1), id++, "Tr_Water_Corner"));
-        corners.add(BR_WATER_CORNER = new Tile(ImgFix.getBuildRotImg(getImgs(0, 0, 5, 0), 270, 1), id++, "Br_Water_Corner"));
+        corners.add(BL_WATER_CORNER = new Tile(ImgFix.getBuildRotImg(getAnimSprites(0, 0), getSprite(5, 0), 0), id++, "Bl_Water_Corner"));
+        corners.add(TL_WATER_CORNER = new Tile(ImgFix.getBuildRotImg(getAnimSprites(0, 0), getSprite(5, 0), 90), id++, "Tl_Water_Corner"));
+        corners.add(TR_WATER_CORNER = new Tile(ImgFix.getBuildRotImg(getAnimSprites(0, 0), getSprite(5, 0), 180), id++, "Tr_Water_Corner"));
+        corners.add(BR_WATER_CORNER = new Tile(ImgFix.getBuildRotImg(getAnimSprites(0, 0), getSprite(5, 0), 270), id++, "Br_Water_Corner"));
         //Road straight
         roadS.add(ROAD_LR = new Tile(getSprite(8, 0), id++, "Road_LR"));
         roadS.add(ROAD_TB = new Tile(ImgFix.getRotImg(getSprite(8, 0), 90), id++, "Tb_road"));
@@ -51,10 +52,10 @@ public class TileManager {
         roadC.add(ROAD_L_TO_T = new Tile(ImgFix.getRotImg(getSprite(7, 0), 180), id++, "Road_Left_To_Top"));
         roadC.add(ROAD_T_TO_R = new Tile(ImgFix.getRotImg(getSprite(7, 0), 270), id++, "Road_Top_To_Right"));
         //Isle
-        islands.add(TL_ISLE = new Tile(ImgFix.buildImg(getImgs(0, 0, 4, 0)), id++, "TL_Isle"));
-        islands.add(TR_ISLE = new Tile(ImgFix.getBuildRotImg(getImgs(0, 0, 4, 0), 90, 1), id++, "Tr_Isle"));
-        islands.add(BR_ISLE = new Tile(ImgFix.getBuildRotImg(getImgs(0, 0, 4, 0), 180, 1), id++, "Br_Isle"));
-        islands.add(BL_ISLE = new Tile(ImgFix.getBuildRotImg(getImgs(0, 0, 4, 0), 270, 1), id++, "Bl_Isle"));
+        islands.add(TL_ISLE = new Tile(ImgFix.getBuildRotImg(getAnimSprites(0, 0), getSprite(4, 0), 0), id++, "TL_Isle"));
+        islands.add(TR_ISLE = new Tile(ImgFix.getBuildRotImg(getAnimSprites(0, 0), getSprite(4, 0), 90), id++, "Tr_Isle"));
+        islands.add(BR_ISLE = new Tile(ImgFix.getBuildRotImg(getAnimSprites(0, 0), getSprite(4, 0), 180), id++, "Br_Isle"));
+        islands.add(BL_ISLE = new Tile(ImgFix.getBuildRotImg(getAnimSprites(0, 0), getSprite(4, 0), 270), id++, "Bl_Isle"));
 
         tiles.addAll(beaches);
         tiles.addAll(corners);
@@ -71,8 +72,20 @@ public class TileManager {
         atlas = LoadSave.getSpriteAtlas();
     }
 
+    public BufferedImage getAnimSprite(int id, int animId) {
+        return tiles.get(id).getSprite(animId);
+    }
+
     public BufferedImage getSprite(int id) {
         return tiles.get(id).getSprite();
+    }
+
+    private BufferedImage[] getAnimSprites(int xCord, int yCord) {
+        BufferedImage[] arr = new BufferedImage[4];
+        for (int i=0; i<4; i++){
+            arr[i] = getSprite(xCord + i, yCord);
+        }
+        return arr;
     }
 
     private BufferedImage getSprite(int xCord, int yCord) {
@@ -101,5 +114,9 @@ public class TileManager {
 
     public ArrayList<Tile> getIslands() {
         return islands;
+    }
+
+    public boolean isAnim(int id) {
+        return tiles.get(id).isAnim();
     }
 }
