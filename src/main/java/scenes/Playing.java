@@ -1,7 +1,9 @@
 package scenes;
 
 import com.mycompany.towerdefense.Game;
+import enemies.Enemy;
 import helpz.LoadSave;
+import managers.EnemyManager;
 import ui.ActionBar;
 
 import java.awt.*;
@@ -15,11 +17,18 @@ public class Playing extends GameScene implements SceneMethods {
 
     private final Game game;
 
+    private EnemyManager enemyManager;
+
     public Playing(Game game) {
         super(game);
         this.game = game;
         loadDefaultLevel();
         actionBar = new ActionBar(0, 640, 640, 100, this);
+        enemyManager = new EnemyManager(this);
+    }
+
+    public void update(){
+        enemyManager.update();
     }
 
     private void loadDefaultLevel() {
@@ -32,13 +41,18 @@ public class Playing extends GameScene implements SceneMethods {
 
     @Override
     public void render(Graphics g) {
-        for (int y = 0; y < lvl.length; y++) {
-            for (int x = 0; x < lvl[y].length; x++) {
+        drawLevel(g);
+        enemyManager.draw(g);
+        actionBar.draw(g);
+    }
+
+    private void drawLevel(Graphics g) {
+        for (int y=0; y<lvl.length; y++){
+            for (int x=0; x<lvl[y].length; x++){
                 int id = lvl[y][x];
-                g.drawImage(getSprite(id), x * 32, y * 32, null);
+                g.drawImage(getSprite(id), x*32, y*32, null);
             }
         }
-        actionBar.draw(g);
     }
 
     private BufferedImage getSprite(int spriteId) {
@@ -49,6 +63,8 @@ public class Playing extends GameScene implements SceneMethods {
     public void mouseClicked(int x, int y) {
         if (y >= 640) {
             actionBar.mouseClicked(x, y);
+        } else {
+            enemyManager.addEnemy(x, y);
         }
     }
 
