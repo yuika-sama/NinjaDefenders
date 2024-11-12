@@ -4,27 +4,34 @@ import com.mycompany.towerdefense.Game;
 import enemies.Enemy;
 import helpz.LoadSave;
 import managers.EnemyManager;
+import objects.PathPoint;
 import ui.ActionBar;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Playing extends GameScene implements SceneMethods {
     private int[][] lvl;
     private final ActionBar actionBar;
 
     private int mouseX, mouseY;
+    private int animId;
 
     private final Game game;
 
     private EnemyManager enemyManager;
+    private int tick;
+
+    private PathPoint start, end;
 
     public Playing(Game game) {
         super(game);
         this.game = game;
         loadDefaultLevel();
-        actionBar = new ActionBar(0, 640, 640, 100, this);
-        enemyManager = new EnemyManager(this);
+        actionBar = new ActionBar(0, 640, 640, 160, this);
+        enemyManager = new EnemyManager(this, start, end);
+
     }
 
     public void update(){
@@ -33,6 +40,10 @@ public class Playing extends GameScene implements SceneMethods {
 
     private void loadDefaultLevel() {
         lvl = LoadSave.GetLevelData("new_level");
+        ArrayList<PathPoint> points = LoadSave.GetLevelPathPoint("new_level");
+        assert points != null;
+        start = points.getFirst();
+        end = points.get(1);
     }
 
     public void setLevel(int[][] lvl) {
@@ -41,30 +52,64 @@ public class Playing extends GameScene implements SceneMethods {
 
     @Override
     public void render(Graphics g) {
+        updateTick();
         drawLevel(g);
         enemyManager.draw(g);
         actionBar.draw(g);
+    }
+
+    private void updateTick() {
+        tick++;
+        if (tick >= 25){
+            tick = 0;
+            animId++;
+            if (animId >= 4){
+                animId = 0;
+            }
+        }
     }
 
     private void drawLevel(Graphics g) {
         for (int y=0; y<lvl.length; y++){
             for (int x=0; x<lvl[y].length; x++){
                 int id = lvl[y][x];
-                g.drawImage(getSprite(id), x*32, y*32, null);
+                if (isAnim(id)){
+                    g.drawImage(getSprite(id, animId), x*32, y*32, null);
+                } else {
+                    g.drawImage(getSprite(id), x*32, y*32, null);
+                }
             }
         }
     }
 
+    private boolean isAnim(int id) {
+        return game.getTileManager().isAnim(id);
+    }
+
     private BufferedImage getSprite(int spriteId) {
         return game.getTileManager().getSprite(spriteId);
+    }
+    private BufferedImage getSprite(int spriteId, int animId) {
+        return game.getTileManager().getAnimSprite(spriteId, animId);
+    }
+
+    public int getTileType(int x, int y) {
+        int xCord = x/32;
+        int yCord = y/32;
+        if (xCord < 0 || xCord > 19){
+            return 0;
+        }
+        if (yCord < 0 || yCord > 19){
+            return 0;
+        }
+        int id = lvl[yCord][xCord];
+        return game.getTileManager().getTile(id).getTileType();
     }
 
     @Override
     public void mouseClicked(int x, int y) {
         if (y >= 640) {
             actionBar.mouseClicked(x, y);
-        } else {
-            enemyManager.addEnemy(x, y);
         }
     }
 

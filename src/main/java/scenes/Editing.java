@@ -2,6 +2,7 @@ package scenes;
 
 import com.mycompany.towerdefense.Game;
 import helpz.LoadSave;
+import objects.PathPoint;
 import objects.Tile;
 import ui.ToolBar;
 
@@ -9,6 +10,9 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import static helpz.Constants.Tiles.ROAD_TILE;
 
 public class Editing extends GameScene implements SceneMethods {
     private final ToolBar toolBar;
@@ -20,17 +24,22 @@ public class Editing extends GameScene implements SceneMethods {
     private int lastTileX, lastTileY, lastTileID;
     private int animId;
     private int tick;
+    private PathPoint start, end;
 
 
     public Editing(Game game) {
         super(game);
         this.game = game;
         loadDefaultLevel();
-        toolBar = new ToolBar(0, 640, 640, 100, this);
+        toolBar = new ToolBar(0, 640, 640, 160, this);
     }
 
     private void loadDefaultLevel() {
         lvl = LoadSave.GetLevelData("new_level");
+        ArrayList<PathPoint> points = LoadSave.GetLevelPathPoint("new_level");
+        assert points != null;
+        start = points.getFirst();
+        end = points.get(1);
     }
 
     private void drawLevel(Graphics g) {
@@ -63,6 +72,16 @@ public class Editing extends GameScene implements SceneMethods {
         drawLevel(g);
         toolBar.draw(g);
         drawSelectedTile(g);
+        drawPathPoint(g);
+    }
+
+    private void drawPathPoint(Graphics g) {
+        if (start != null){
+            g.drawImage(toolBar.getPathStart(), start.getxCord()*32, start.getyCord()*32, 32, 32, null);
+        }
+        if (end != null){
+            g.drawImage(toolBar.getPathEnd(), end.getxCord()*32, end.getyCord()*32, 32, 32, null);
+        }
     }
 
     private void updateTick() {
@@ -89,22 +108,33 @@ public class Editing extends GameScene implements SceneMethods {
     }
 
     public void saveLevel() {
-        LoadSave.SaveLevel("new_level", lvl);
-        game.getPlaying().setLevel(lvl);
+        LoadSave.SaveLevel("new_level", lvl, start, end);
+        this.game.getPlaying().setLevel(lvl);
     }
 
     private void changeTile(int x, int y) {
         if (x < 0 || y < 0 || x > 640 || y > 640) return;
         if (selectedTile != null) {
             int tileX = x / 32, tileY = y / 32;
-            if (lastTileX == tileX && lastTileY == tileY && lastTileID == selectedTile.getId()) return;
-            lastTileY = tileY;
-            lastTileX = tileX;
-            lastTileID = selectedTile.getId();
-            lvl[tileY][tileX] = selectedTile.getId();
-
+            if (selectedTile.getId() >= 0){
+                if (lastTileX == tileX && lastTileY == tileY && lastTileID == selectedTile.getId()) return;
+                lastTileY = tileY;
+                lastTileX = tileX;
+                lastTileID = selectedTile.getId();
+                lvl[tileY][tileX] = selectedTile.getId();
+            } else {
+                int id = lvl[tileY][tileX];
+                if (game.getTileManager().getTile(id).getTileType() == ROAD_TILE){
+                    if (selectedTile.getId() == -1){
+                        start = new PathPoint(tileX, tileY);
+                    } else {
+                        end = new PathPoint(tileX, tileY);
+                    }
+                }
+            }
         }
     }
+
 
     @Override
     public void mouseClicked(int x, int y) {
@@ -132,7 +162,7 @@ public class Editing extends GameScene implements SceneMethods {
             toolBar.mousePressed(x, y);
         }
     }
-
+;
     @Override
     public void mouseReleased(int x, int y) {
         if (y >= 640) {

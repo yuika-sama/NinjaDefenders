@@ -3,6 +3,7 @@ package com.mycompany.towerdefense;
 
 import helpz.LoadSave;
 import managers.TileManager;
+import objects.PathPoint;
 import scenes.Editing;
 import scenes.GameMenu;
 import scenes.Playing;
@@ -24,6 +25,7 @@ public class Game extends JFrame implements Runnable {
     private Setting setting;
     private Editing editing;
     private TileManager tileManager;
+    private PathPoint pEnd, pStart;
 
     public Game() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -51,7 +53,7 @@ public class Game extends JFrame implements Runnable {
         for (int i = 0; i < arr.length; i++) {
             arr[i] = 0;
         }
-//        LoadSave.CreateLevel("new level", arr);
+        LoadSave.CreateLevel("new_level", arr, pStart, pEnd);
     }
 
     private void initClasses() {
