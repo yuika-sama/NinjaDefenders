@@ -73,6 +73,12 @@ public class Editing extends GameScene implements SceneMethods {
         toolBar.draw(g);
         drawSelectedTile(g);
         drawPathPoint(g);
+        drawHighLight(g);
+    }
+
+    private void drawHighLight(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.drawRect(mouseX, mouseY, 32, 32);
     }
 
     private void drawPathPoint(Graphics g) {

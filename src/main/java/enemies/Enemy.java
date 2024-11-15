@@ -1,16 +1,20 @@
 package enemies;
 
+import helpz.Constants;
+
 import java.awt.*;
 
 import static helpz.Constants.Direction.*;
 
 public abstract class Enemy {
-    private float x, y;
-    private Rectangle bounds;
-    private int hp;
-    private int ID;
-    private int enemyType;
-    private int lastDir;
+    protected float x, y;
+    protected Rectangle bounds;
+    protected int hp, maxHP;
+    protected int ID;
+    protected int enemyType;
+    protected int lastDir;
+
+    protected boolean alive = true;
 
     public Enemy(float x, float y, int ID, int enemyType) {
         this.x = x;
@@ -19,6 +23,20 @@ public abstract class Enemy {
         this.enemyType = enemyType;
         bounds = new Rectangle((int)x, (int) y, 32, 32);
         lastDir = -1;
+
+        setStartHealth();
+    }
+
+    private void setStartHealth(){
+        hp = Constants.Enemies.getStartHealth(enemyType);
+        maxHP = hp;
+    }
+
+    public void hurt(int dmg){
+        this.hp -= dmg;
+        if (this.hp <= 0){
+            alive = false;
+        }
     }
 
     public void move(float speed, int dir){
@@ -70,5 +88,13 @@ public abstract class Enemy {
 
     public int getLastDir() {
         return lastDir;
+    }
+
+    public float getHealthBarFloat() {
+        return hp/(float)maxHP;
+    }
+
+    public boolean isAlive() {
+        return alive;
     }
 }

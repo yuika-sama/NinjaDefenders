@@ -10,6 +10,7 @@ import objects.Tower;
 import ui.ActionBar;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -69,6 +70,12 @@ public class Playing extends GameScene implements SceneMethods {
         actionBar.draw(g);
         towerManager.draw(g);
         drawSelectedTower(g);
+        drawHighLight(g);
+    }
+
+    private void drawHighLight(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.drawRect(mouseX, mouseY, 32, 32);
     }
 
     private void updateTick() {
@@ -163,6 +170,10 @@ public class Playing extends GameScene implements SceneMethods {
         }
     }
 
+    public EnemyManager getEnemyManager() {
+        return enemyManager;
+    }
+
     @Override
     public void mousePressed(int x, int y) {
         if (y >= 640) {
@@ -185,5 +196,11 @@ public class Playing extends GameScene implements SceneMethods {
 
     public void setSelectedTower(Tower selectedTower) {
         this.selectedTower = selectedTower;
+    }
+
+    public void mouseClicked(MouseEvent e, int x, int y) {
+        if (e.getButton() == MouseEvent.BUTTON3){
+            selectedTower = null;
+        }
     }
 }

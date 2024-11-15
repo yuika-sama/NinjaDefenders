@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import static com.mycompany.towerdefense.GameState.EDIT;
+import static com.mycompany.towerdefense.GameState.PLAYING;
 
 public class MyMouseListener implements MouseListener, MouseMotionListener {
     private final Game game;
@@ -37,6 +38,8 @@ public class MyMouseListener implements MouseListener, MouseMotionListener {
         } else if (e.getButton() == MouseEvent.BUTTON3){
             if (GameState.gameStates == EDIT) {
                 game.getEditor().mouseClicked(e, e.getX(), e.getY());
+            } else if (GameState.gameStates == PLAYING){
+                game.getPlaying().mouseClicked(e, e.getX(), e.getY());
             }
         }
     }

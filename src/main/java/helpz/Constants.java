@@ -34,6 +34,21 @@ public class Constants {
                     return 0;
             }
         }
+
+        public static int getStartHealth(int enemyType){
+            switch(enemyType){
+                case ORC:
+                    return 100;
+                case BAT:
+                    return 60;
+                case KNIGHT:
+                    return 250;
+                case WOLF:
+                    return 85;
+                default:
+                    return 0;
+            }
+        }
     }
 
     public static class Towers{
@@ -51,6 +66,60 @@ public class Constants {
                     return "Wizard";
             }
             return "";
+        }
+
+        public static float getStartDmg(int towerType){
+            switch (towerType){
+                case CANNON:
+                    return 25;
+                case ARCHER:
+                    return 15;
+                case WIZARD:
+                    return 5;
+            }
+            return 0;
+        }
+
+        public static float getDefaultRange(int towerType){
+            switch (towerType){
+                case CANNON:
+                    return 100;
+                case ARCHER:
+                    return 100;
+                case WIZARD:
+                    return 100;
+            }
+            return 0;
+        }
+
+        public static float getDefaultCoolDown(int towerType){
+            switch (towerType){
+                case CANNON:
+                    return 10;
+                case ARCHER:
+                    return 10;
+                case WIZARD:
+                    return 10;
+            }
+            return 0;
+        }
+    }
+
+    public static class Projectile{
+        public static final int ARROW = 0;
+        public static final int BOMB = 1;
+        public static final int CHAINS = 2;
+
+        public static float getSpeed(int type){
+            switch(type){
+                case ARROW:
+                    return 3f;
+                case BOMB:
+                    return 1f;
+                case CHAINS:
+                    return 2f;
+            }
+            return 0f;
         }
     }
 }

@@ -1,7 +1,6 @@
 package ui;
 
 import helpz.Constants;
-import managers.TowerManager;
 import objects.Tower;
 import scenes.Playing;
 
@@ -72,7 +71,29 @@ public class ActionBar extends Bar {
             g.setFont(new Font("LucidaSans", Font.BOLD, 15));
             g.drawString("" + Constants.Towers.getName(displayTower.getTowerType()), 490, 660);
             g.drawString("ID: " + displayTower.getId(), 490, 675);
+
+            drawDisplayedTowerBorder(g);
+            drawDisplayedTowerRange(g);
         }
+    }
+
+    private void drawDisplayedTowerRange(Graphics g) {
+        g.setColor(Color.YELLOW);
+        g.drawOval(displayTower.getX() + 16 - (int)displayTower.getRange(),
+                displayTower.getY() + 16 - (int)displayTower.getRange(),
+                (int)displayTower.getRange()*2,
+                (int)displayTower.getRange()*2);
+    }
+
+    private void drawDisplayedTowerBorder(Graphics g) {
+
+        g.setColor(Color.CYAN);
+        g.drawRect(displayTower.getX(), displayTower.getY(), 32, 32);
+
+    }
+
+    public void displayTower(Tower t) {
+        displayTower = t;
     }
 
     public void mouseClicked(int x, int y) {
@@ -124,9 +145,5 @@ public class ActionBar extends Bar {
         for (MyButton b:towerButtons){
             b.resetBooleans();
         }
-    }
-
-    public void displayTower(Tower t) {
-        displayTower = t;
     }
 }
