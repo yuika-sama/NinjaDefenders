@@ -3,9 +3,9 @@ package objects;
 import helpz.Constants;
 
 public class Tower {
-    private int x, y, id, towerType;
+    private int x, y, id, towerType, cdTick, dmg;
 
-    private float dmg, range, cd;
+    private float range, cd;
 
     public Tower(int x, int y, int id, int towerType) {
         this.x = x;
@@ -30,6 +30,18 @@ public class Tower {
         dmg = Constants.Towers.getStartDmg(towerType);
     }
 
+    public void update(){
+        cdTick++;
+    }
+
+    public boolean isCooldownOver() {
+        return cdTick >= cd;
+    }
+
+    public void resetCooldown() {
+        cdTick = 0;
+    }
+
     public int getX() {
         return x;
     }
@@ -46,7 +58,7 @@ public class Tower {
         return towerType;
     }
 
-    public float getDmg() {
+    public int getDmg() {
         return dmg;
     }
 

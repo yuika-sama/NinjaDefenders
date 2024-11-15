@@ -4,6 +4,7 @@ import com.mycompany.towerdefense.Game;
 import enemies.Enemy;
 import helpz.LoadSave;
 import managers.EnemyManager;
+import managers.ProjectileManager;
 import managers.TowerManager;
 import objects.PathPoint;
 import objects.Tower;
@@ -14,19 +15,16 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import static helpz.Constants.Tiles.*;
+import static helpz.Constants.Tiles.GRASS_TILE;
 
 public class Playing extends GameScene implements SceneMethods {
     private final TowerManager towerManager;
-    private int[][] lvl;
     private final ActionBar actionBar;
-
+    private final Game game;
+    private int[][] lvl;
     private int mouseX, mouseY;
     private int animId;
-
-    private final Game game;
-
-    private EnemyManager enemyManager;
+    private final EnemyManager enemyManager;
     private int tick;
 
     private PathPoint start, end;
@@ -34,7 +32,9 @@ public class Playing extends GameScene implements SceneMethods {
     private Tower selectedTower;
     private boolean drawSelected;
 
-    private ArrayList<Tower> towers = new ArrayList<>();
+    private final ArrayList<Tower> towers = new ArrayList<>();
+
+    private final ProjectileManager projectileManager;
 
     public Playing(Game game) {
         super(game);
@@ -43,11 +43,13 @@ public class Playing extends GameScene implements SceneMethods {
         actionBar = new ActionBar(0, 640, 640, 160, this);
         enemyManager = new EnemyManager(this, start, end);
         towerManager = new TowerManager(this);
+        projectileManager = new ProjectileManager(this);
     }
 
-    public void update(){
+    public void update() {
         enemyManager.update();
         towerManager.update();
+        projectileManager.update();
     }
 
     private void loadDefaultLevel() {
@@ -69,6 +71,7 @@ public class Playing extends GameScene implements SceneMethods {
         enemyManager.draw(g);
         actionBar.draw(g);
         towerManager.draw(g);
+        projectileManager.draw(g);
         drawSelectedTower(g);
         drawHighLight(g);
     }
@@ -80,23 +83,23 @@ public class Playing extends GameScene implements SceneMethods {
 
     private void updateTick() {
         tick++;
-        if (tick >= 25){
+        if (tick >= 25) {
             tick = 0;
             animId++;
-            if (animId >= 4){
+            if (animId >= 4) {
                 animId = 0;
             }
         }
     }
 
     private void drawLevel(Graphics g) {
-        for (int y=0; y<lvl.length; y++){
-            for (int x=0; x<lvl[y].length; x++){
+        for (int y = 0; y < lvl.length; y++) {
+            for (int x = 0; x < lvl[y].length; x++) {
                 int id = lvl[y][x];
-                if (isAnim(id)){
-                    g.drawImage(getSprite(id, animId), x*32, y*32, null);
+                if (isAnim(id)) {
+                    g.drawImage(getSprite(id, animId), x * 32, y * 32, null);
                 } else {
-                    g.drawImage(getSprite(id), x*32, y*32, null);
+                    g.drawImage(getSprite(id), x * 32, y * 32, null);
                 }
             }
         }
@@ -109,25 +112,26 @@ public class Playing extends GameScene implements SceneMethods {
     private BufferedImage getSprite(int spriteId) {
         return game.getTileManager().getSprite(spriteId);
     }
+
     private BufferedImage getSprite(int spriteId, int animId) {
         return game.getTileManager().getAnimSprite(spriteId, animId);
     }
 
     public int getTileType(int x, int y) {
-        int xCord = x/32;
-        int yCord = y/32;
-        if (xCord < 0 || xCord > 19){
+        int xCord = x / 32;
+        int yCord = y / 32;
+        if (xCord < 0 || xCord > 19) {
             return 0;
         }
-        if (yCord < 0 || yCord > 19){
+        if (yCord < 0 || yCord > 19) {
             return 0;
         }
         int id = lvl[yCord][xCord];
         return game.getTileManager().getTile(id).getTileType();
     }
 
-    private void drawSelectedTower(Graphics g){
-        if (selectedTower != null){
+    private void drawSelectedTower(Graphics g) {
+        if (selectedTower != null) {
             g.drawImage(towerManager.getTowerImgs()[selectedTower.getTowerType()], mouseX, mouseY, null);
         }
     }
@@ -137,9 +141,9 @@ public class Playing extends GameScene implements SceneMethods {
         if (y >= 640) {
             actionBar.mouseClicked(x, y);
         } else {
-            if (selectedTower != null){
-                if (isGrass(mouseX, mouseY)){
-                    if (getTowerAt(mouseX, mouseY) == null){
+            if (selectedTower != null) {
+                if (isGrass(mouseX, mouseY)) {
+                    if (getTowerAt(mouseX, mouseY) == null) {
                         towerManager.addTower(selectedTower, mouseX, mouseY);
                         selectedTower = null;
                     }
@@ -156,7 +160,7 @@ public class Playing extends GameScene implements SceneMethods {
     }
 
     private boolean isGrass(int x, int y) {
-        int id = lvl[y/32][x/32];
+        int id = lvl[y / 32][x / 32];
         int tileType = game.getTileManager().getTile(id).getTileType();
         return (tileType == GRASS_TILE);
     }
@@ -199,8 +203,12 @@ public class Playing extends GameScene implements SceneMethods {
     }
 
     public void mouseClicked(MouseEvent e, int x, int y) {
-        if (e.getButton() == MouseEvent.BUTTON3){
+        if (e.getButton() == MouseEvent.BUTTON3) {
             selectedTower = null;
         }
+    }
+
+    public void shootEnemy(Tower t, Enemy e) {
+        projectileManager.newProjectile(t, e);
     }
 }
