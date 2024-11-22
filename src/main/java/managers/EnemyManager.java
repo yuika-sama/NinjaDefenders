@@ -4,14 +4,10 @@ import enemies.*;
 import helpz.Constants;
 import helpz.LoadSave;
 import objects.PathPoint;
-import objects.Tower;
 import scenes.Playing;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 import static helpz.Constants.Direction.*;
@@ -22,7 +18,7 @@ import static helpz.Constants.Monsters.*;
 public class EnemyManager {
 
     private final Playing playing;
-    private BufferedImage[] enemyImgs;
+    private final BufferedImage[] enemyImgs;
     private BufferedImage slowEffect;
 
     private final ArrayList<Enemy> enemies = new ArrayList<>();
@@ -220,46 +216,46 @@ public class EnemyManager {
     int y = start.getyCord() * 32;
     switch (enemyType) {
         case GREEN_SLIME:
-            enemies.add(new GreenSlime(x, y, 0));
+            enemies.add(new GreenSlime(x, y, 0, this));
             break;
         case BIG_GREEN_SLIME:
-            enemies.add(new BigGreenSlime(x, y, 0));
+            enemies.add(new BigGreenSlime(x, y, 0, this));
             break;
         case DARK_GREEN_SLIME:
-            enemies.add(new DarkGreenSlime(x, y, 0));
+            enemies.add(new DarkGreenSlime(x, y, 0, this));
             break;
         case LAVA_SLIME:
-            enemies.add(new LavaSlime(x, y, 0));
+            enemies.add(new LavaSlime(x, y, 0, this));
             break;
         case PINK_SLIME:
-            enemies.add(new PinkSlime(x, y, 0));
+            enemies.add(new PinkSlime(x, y, 0, this));
             break;
         case TOXIC_SLIME:
-            enemies.add(new ToxicSlime(x, y, 0));
+            enemies.add(new ToxicSlime(x, y, 0, this));
             break;
         case KING_SLIME:
-            enemies.add(new KingSlime(x, y, 0));
+            enemies.add(new KingSlime(x, y, 0, this));
             break;
         case MUSHROOM_MAN:
-            enemies.add(new MushroomMan(x, y, 0));
+            enemies.add(new MushroomMan(x, y, 0, this));
             break;
         case GOBLIN:
-            enemies.add(new Goblin(x, y, 0));
+            enemies.add(new Goblin(x, y, 0, this));
             break;
         case DEMON_GREEN:
-            enemies.add(new DemonGreen(x, y, 0));
+            enemies.add(new DemonGreen(x, y, 0, this));
             break;
         case ROBOT_GREEN:
-            enemies.add(new RobotGreen(x, y, 0));
+            enemies.add(new RobotGreen(x, y, 0, this));
             break;
         case SKELETON_P:
-            enemies.add(new Skeleton(x, y, 0));
+            enemies.add(new Skeleton(x, y, 0, this));
             break;
         case SPIRIT:
-            enemies.add(new Spirit(x, y, 0));
+            enemies.add(new Spirit(x, y, 0, this));
             break;
         case TENGU:
-            enemies.add(new Tengu(x, y, 0));
+            enemies.add(new Tengu(x, y, 0, this));
             break;
     }
 }
@@ -306,5 +302,9 @@ public class EnemyManager {
             }
         }
         return amount;
+    }
+
+    public void rewardMoney(int enemyType) {
+        playing.rewardPlayer(enemyType);
     }
 }

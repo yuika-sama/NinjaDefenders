@@ -46,6 +46,20 @@ public class Constants {
         public static final int ORANGE_SORCERER = 6;
         public static final int RED_SORCERER = 7;
 
+        public static int getTowerCost(int towerType) {
+            return switch (towerType) {
+                case DARK_NINJA -> 70; // 30 + 20 + 10 + 10
+                case YELLOW_NINJA -> 70; // 30 + 16 + 12 + 12
+                case RED_NINJA -> 91; // 30 + 30 + 15 + 16
+                case FLAMIE -> 70; // 30 + 24 + 9 + 7
+                case KNIGHT -> 82; // 30 + 40 + 5 + 7
+                case SAMURAI -> 100; // 30 + 60 + 6 + 4
+                case ORANGE_SORCERER -> 63; // 30 + 2 + 10 + 3
+                case RED_SORCERER -> 73; // 30 + 10 + 12 + 5
+                default -> 30; // Default cost if the towerType is invalid
+            };
+        }
+
         public static String getName(int towerType) {
             return switch (towerType) {
                 case DARK_NINJA -> "Dark Ninja";
@@ -115,6 +129,20 @@ public class Constants {
                 default -> "";
             };
         }
+
+        public static int getTowerMaxTier(int towerType) {
+            return switch (towerType) {
+                case DARK_NINJA -> 5;
+                case YELLOW_NINJA -> 4;
+                case RED_NINJA -> 3;
+                case FLAMIE -> 3;
+                case KNIGHT -> 4;
+                case SAMURAI -> 3;
+                case ORANGE_SORCERER -> 4;
+                case RED_SORCERER -> 3;
+                default -> 0;
+            };
+        }
     }
 
 
@@ -151,6 +179,26 @@ public class Constants {
                 case SKELETON_P -> 1.2f;
                 case SPIRIT -> 1.0f;
                 case TENGU -> 1.0f;
+                default -> 0;
+            };
+        }
+
+        public static int getReward(int enemyType) {
+            return switch (enemyType) {
+                case GREEN_SLIME -> 15;       // Máu: 100, Tốc độ: 0.5
+                case BIG_GREEN_SLIME -> 23;  // Máu: 150, Tốc độ: 0.8
+                case DARK_GREEN_SLIME -> 23; // Máu: 120, Tốc độ: 1.1
+                case LAVA_SLIME -> 24;       // Máu: 120, Tốc độ: 1.2
+                case PINK_SLIME -> 20;       // Máu: 100, Tốc độ: 1.0
+                case TOXIC_SLIME -> 23;      // Máu: 120, Tốc độ: 1.1
+                case KING_SLIME -> 31;       // Máu: 200, Tốc độ: 1.1
+                case MUSHROOM_MAN -> 20;     // Máu: 80, Tốc độ: 1.2
+                case GOBLIN -> 29;           // Máu: 160, Tốc độ: 1.3
+                case DEMON_GREEN -> 21;      // Máu: 100, Tốc độ: 1.1
+                case ROBOT_GREEN -> 27;      // Máu: 200, Tốc độ: 0.7
+                case SKELETON_P -> 19;       // Máu: 70, Tốc độ: 1.2
+                case SPIRIT -> 15;           // Máu: 50, Tốc độ: 1.0
+                case TENGU -> 28;            // Máu: 180, Tốc độ: 1.0
                 default -> 0;
             };
         }

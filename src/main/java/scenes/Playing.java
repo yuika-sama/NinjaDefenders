@@ -2,6 +2,7 @@ package scenes;
 
 import com.mycompany.towerdefense.Game;
 import enemies.Enemy;
+import helpz.Constants;
 import helpz.LoadSave;
 import managers.EnemyManager;
 import managers.ProjectileManager;
@@ -33,6 +34,7 @@ public class Playing extends GameScene implements SceneMethods {
     private int tick;
     private PathPoint start, end;
     private boolean drawSelected;
+    private int goldTick=0;
 
     public Playing(Game game) {
         super(game);
@@ -58,7 +60,14 @@ public class Playing extends GameScene implements SceneMethods {
     }
 
     public void update() {
+        updateTick();
         waveManager.update();
+
+        goldTick++;
+        if (goldTick % (60*3) == 0){
+            actionBar.addGold(1);
+        }
+
 
         if (isWaveCleared()){
             if (isMoreWaves()){
@@ -212,6 +221,9 @@ public class Playing extends GameScene implements SceneMethods {
                 if (isGrass(mouseX, mouseY)) {
                     if (getTowerAt(mouseX, mouseY) == null) {
                         towerManager.addTower(selectedTower, mouseX, mouseY);
+                        
+                        removeGold(selectedTower.getTowerType());
+                        
                         selectedTower = null;
                     }
                 }
@@ -222,6 +234,10 @@ public class Playing extends GameScene implements SceneMethods {
                 actionBar.displayEnemy(e);
             }
         }
+    }
+
+    private void removeGold(int towerType) {
+        actionBar.payForTower(towerType);
     }
 
     private Enemy getEnemyAt(int mouseX, int mouseY) {
@@ -271,5 +287,18 @@ public class Playing extends GameScene implements SceneMethods {
 
     public WaveManager getWaveManager() {
         return waveManager;
+    }
+
+    public void rewardPlayer(int enemyType){
+        actionBar.addGold(Constants.Monsters.getReward(enemyType));
+
+    }
+
+    public void removeTower(Tower displayTower) {
+        towerManager.removeTower(displayTower);
+    }
+
+    public void upgradeTower(Tower displayTower) {
+        towerManager.upgradeTower(displayTower);
     }
 }

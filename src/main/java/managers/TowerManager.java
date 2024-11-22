@@ -152,4 +152,20 @@ public class TowerManager {
         }
         return null;
     }
+
+    public void removeTower(Tower displayTower) {
+        for (int i = 0; i<towers.size(); i++){
+            if (towers.get(i).getId() == displayTower.getId()){
+                towers.remove(i);
+            }
+        }
+    }
+
+    public void upgradeTower(Tower displayTower) {
+        for (Tower t:towers){
+            if (t.getId() == displayTower.getId()){
+                t.upgradeTower();
+            }
+        }
+    }
 }

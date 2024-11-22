@@ -18,12 +18,14 @@ public abstract class Enemy {
     protected int slowTickLimit = 120;
     protected int slowTick = slowTickLimit;
     protected boolean alive = true;
+    protected EnemyManager enemyManager;
 
-    public Enemy(float x, float y, int ID, int enemyType) {
+    public Enemy(float x, float y, int ID, int enemyType, EnemyManager enemyManager) {
         this.x = x;
         this.y = y;
         this.ID = ID;
         this.enemyType = enemyType;
+        this.enemyManager = enemyManager;
         bounds = new Rectangle((int) x, (int) y, 32, 32);
         lastDir = -1;
 
@@ -39,6 +41,7 @@ public abstract class Enemy {
         this.hp -= dmg;
         if (this.hp <= 0) {
             alive = false;
+            enemyManager.rewardMoney(enemyType);
         }
     }
 

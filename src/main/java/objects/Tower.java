@@ -3,6 +3,7 @@ package objects;
 import helpz.Constants;
 
 import static helpz.Constants.Direction.*;
+import static helpz.Constants.Turrets.*;
 
 public class Tower {
     private final int x;
@@ -15,6 +16,7 @@ public class Tower {
     private int direction = DOWN;
     private boolean attacking = false;
     private int animIndex, animTick = 0;
+    private int tier;
 
     private float range, cd;
 
@@ -23,6 +25,7 @@ public class Tower {
         this.y = y;
         this.id = id;
         this.towerType = towerType;
+        tier = 1;
 
         setDefaultDamage();
         setDefaultRange();
@@ -39,6 +42,62 @@ public class Tower {
 
     private void setDefaultDamage() {
         dmg = Constants.Turrets.getStartDmg(towerType);
+    }
+
+    public void upgradeTower() {
+        this.tier++;
+        switch (towerType) {
+            case DARK_NINJA -> {
+                dmg += 5; // Increase damage by 5
+                range += 10; // Increase range by 10
+                cd -= 2; // Reduce cooldown time
+            }
+            case YELLOW_NINJA -> {
+                dmg += 4;
+                range += 15;
+                cd -= 3;
+            }
+            case RED_NINJA -> {
+                dmg += 8;
+                range += 12;
+                cd -= 1;
+            }
+            case FLAMIE -> {
+                dmg += 10;
+                range += 8;
+                cd -= 2.5f;
+            }
+            case KNIGHT -> {
+                dmg += 15;
+                range += 5;
+                cd -= 2;
+            }
+            case SAMURAI -> {
+                dmg += 20;
+                range += 7;
+                cd -= 3;
+            }
+            case ORANGE_SORCERER -> {
+                dmg += 2;
+                range += 20;
+                cd -= 1.5f;
+            }
+            case RED_SORCERER -> {
+                dmg += 3;
+                range += 25;
+                cd -= 2;
+            }
+            default -> {
+                // If the tower type doesn't match any predefined types
+                dmg += 1; // Slightly increase damage
+                range += 5; // Slightly increase range
+                cd -= 0.5f; // Slightly reduce cooldown
+            }
+        }
+    }
+
+    public int getTier() {
+        return tier;
     }
 
     public void update() {
