@@ -1,0 +1,5 @@
+demon green: máu trung bình, tốc độ trung bình, khi chết sẽ tăng tốc cho đồng minh quái vật trong 5s khoảng 1.2-1.3x, chỉ nhận sát thương tầm xa
+robot green: máu trâu, tốc độ chậm, khi chết sẽ gấp đôi cooldown cho trụ giết nó trong 5s
+skeletonP: máu thấp, tốc độ trung bình cao, kháng mọi đòn chém
+spirit: máu thấp, tốc độ trung bình, chỉ nhận sát thương bởi pháp sư
+tengu: máu trâu, tốc độ trung bình, chỉ nhận sát thương từ đòn tấn công mang tính vật lý

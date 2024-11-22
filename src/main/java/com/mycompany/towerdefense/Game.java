@@ -18,12 +18,12 @@ public class Game extends JFrame implements Runnable {
     private BufferedImage img;
 
     private GameScreen gameScreen;
-
     private Render render;
     private GameMenu menu;
     private Playing playing;
     private Setting setting;
     private Editing editing;
+
     private TileManager tileManager;
     private PathPoint pEnd, pStart;
 
@@ -42,18 +42,9 @@ public class Game extends JFrame implements Runnable {
     }
 
     public static void main(String[] args) {
-        System.out.println("Hello there");
         Game game = new Game();
         game.gameScreen.initInput();
         game.start();
-    }
-
-    private void createDefaultLevel() {
-        int[] arr = new int[400];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = 0;
-        }
-        LoadSave.CreateLevel("new_level", arr, pStart, pEnd);
     }
 
     private void initClasses() {
@@ -67,14 +58,21 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void start() {
-        Thread gameThread = new Thread(this) {
-        };
+        Thread gameThread = new Thread(this) {};
         gameThread.start();
     }
 
+    private void createDefaultLevel() {
+        int[] arr = new int[400];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = 0;
+        }
+        LoadSave.CreateLevel("new_level", arr, pStart, pEnd);
+    }
+
+
     @Override
     public void run() {
-
         double timePerFrame = 1000000000.0 / FPS_SET;
         double timePerUpdate = 1000000000.0 / UPS_SET;
 
@@ -85,6 +83,7 @@ public class Game extends JFrame implements Runnable {
         int frames = 0;
         int updates = 0;
         long now;
+
         while (true) {
             //render
             now = System.nanoTime();

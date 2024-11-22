@@ -23,7 +23,7 @@ public class MyKeyboardListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (GameState.gameStates == EDIT) {
-            game.getEditor().keyPressed(e);
+            //do nothing
         }
     }
 

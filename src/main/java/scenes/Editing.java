@@ -7,7 +7,6 @@ import objects.Tile;
 import ui.ToolBar;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class Editing extends GameScene implements SceneMethods {
         super(game);
         this.game = game;
         loadDefaultLevel();
-        toolBar = new ToolBar(0, 640, 640, 160, this);
+        toolBar = new ToolBar(640, 0, 160, 640, this);
     }
 
     private void loadDefaultLevel() {
@@ -104,7 +103,6 @@ public class Editing extends GameScene implements SceneMethods {
     private void drawSelectedTile(Graphics g) {
         if (selectedTile != null && drawSelected) {
             g.drawImage(selectedTile.getSprite(), mouseX, mouseY, 32, 32, null);
-
         }
     }
 
@@ -144,7 +142,7 @@ public class Editing extends GameScene implements SceneMethods {
 
     @Override
     public void mouseClicked(int x, int y) {
-        if (y >= 640) {
+        if (x >= 640) {
             toolBar.mouseClicked(x, y);
         } else {
             changeTile(mouseX, mouseY);
@@ -152,7 +150,7 @@ public class Editing extends GameScene implements SceneMethods {
     }
 
     public void mouseMoved(int x, int y) {
-        if (y >= 640) {
+        if (x >= 640) {
             toolBar.mouseMoved(x, y);
             drawSelected = false;
         } else {
@@ -164,35 +162,28 @@ public class Editing extends GameScene implements SceneMethods {
 
     @Override
     public void mousePressed(int x, int y) {
-        if (y >= 640) {
+        if (x >= 640) {
             toolBar.mousePressed(x, y);
         }
     }
-;
+
     @Override
     public void mouseReleased(int x, int y) {
-        if (y >= 640) {
+        if (x >= 640) {
             toolBar.mouseReleased(x, y);
         }
     }
 
     @Override
     public void mouseDragged(int x, int y) {
-        if (y < 640) {
+        if (x < 640) {
             changeTile(x, y);
-        }
-    }
-
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_R) {
-//            toolBar.rotateSprite();
-//            System.out.println("Lol don't try. I closed this method");
         }
     }
 
     public void mouseClicked(MouseEvent e, int x, int y) {
         if (e.getButton() == MouseEvent.BUTTON3){
-            if (y < 640){
+            if (x < 640){
                 toolBar.rotateSprite();
             }
         }

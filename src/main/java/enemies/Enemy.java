@@ -1,8 +1,10 @@
 package enemies;
 
 import helpz.Constants;
+import managers.EnemyManager;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 import static helpz.Constants.Direction.*;
 
@@ -15,7 +17,6 @@ public abstract class Enemy {
     protected int lastDir;
     protected int slowTickLimit = 120;
     protected int slowTick = slowTickLimit;
-
     protected boolean alive = true;
 
     public Enemy(float x, float y, int ID, int enemyType) {
@@ -30,7 +31,7 @@ public abstract class Enemy {
     }
 
     private void setStartHealth() {
-        hp = Constants.Enemies.getStartHealth(enemyType);
+        hp = Constants.Monsters.getStartHealth(enemyType);
         maxHP = hp;
     }
 
@@ -41,10 +42,23 @@ public abstract class Enemy {
         }
     }
 
+    public void kill() {
+        System.out.println("Game set!!");
+        alive = false;
+        hp = 0;
+    }
+
+    public int getSpriteType(int enemyType){
+        return helpz.Constants.Monsters.getSpriteType(enemyType);
+    }
+
+    public String getName(){
+        return Constants.Monsters.getName(enemyType);
+    }
     public void move(float speed, int dir) {
         lastDir = dir;
 
-        if (slowTick < slowTickLimit){
+        if (slowTick < slowTickLimit) {
             slowTick++;
             speed *= 0.2f;
         }
@@ -74,6 +88,14 @@ public abstract class Enemy {
     public void setPos(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public void slow() {
+        slowTick = 0;
+    }
+
+    public boolean isSlowed() {
+        return (slowTickLimit > slowTick);
     }
 
     public float getX() {
@@ -112,11 +134,5 @@ public abstract class Enemy {
         return alive;
     }
 
-    public void slow() {
-        slowTick = 0;
-    }
 
-    public boolean isSlowed(){
-        return (slowTickLimit > slowTick);
-    }
 }

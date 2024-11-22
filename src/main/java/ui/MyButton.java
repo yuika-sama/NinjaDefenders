@@ -4,9 +4,8 @@ import java.awt.*;
 
 public class MyButton {
 
-    public int x, y, width, height, id;
     private final String text;
-
+    public int x, y, width, height, id;
     private Rectangle bounds;
     private boolean mouseOver, mousePressed;
 
@@ -34,9 +33,7 @@ public class MyButton {
         initBounds();
     }
 
-    public int getId() {
-        return id;
-    }
+
 
     private void initBounds() {
         this.bounds = new Rectangle(x, y, width, height);
@@ -84,6 +81,10 @@ public class MyButton {
     public void resetBooleans() {
         this.mouseOver = false;
         this.mousePressed = false;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Rectangle getBounds() {

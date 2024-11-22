@@ -16,6 +16,7 @@ public class TileManager {
     public Tile WATER, BL_WATER_CORNER, TL_WATER_CORNER, TR_WATER_CORNER, BR_WATER_CORNER, R_WATER, B_WATER, L_WATER, T_WATER;
     public Tile TL_ISLE, TR_ISLE, BR_ISLE, BL_ISLE;
     public Tile GRASS;
+
     public BufferedImage atlas;
 
     public ArrayList<Tile> tiles = new ArrayList<>();
@@ -58,7 +59,7 @@ public class TileManager {
         islands.add(TR_ISLE = new Tile(ImgFix.getBuildRotImg(getAnimSprites(0, 0), getSprite(4, 0), 90), id++, WATER_TILE));
         islands.add(BR_ISLE = new Tile(ImgFix.getBuildRotImg(getAnimSprites(0, 0), getSprite(4, 0), 180), id++, WATER_TILE));
         islands.add(BL_ISLE = new Tile(ImgFix.getBuildRotImg(getAnimSprites(0, 0), getSprite(4, 0), 270), id++, WATER_TILE));
-
+        //fast add
         tiles.addAll(beaches);
         tiles.addAll(corners);
         tiles.addAll(roadS);

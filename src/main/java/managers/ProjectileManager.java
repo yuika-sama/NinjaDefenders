@@ -11,17 +11,20 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import static helpz.Constants.Direction.*;
 import static helpz.Constants.Projectile.*;
-import static helpz.Constants.Towers.*;
+import static helpz.Constants.Turrets.*;
 
 public class ProjectileManager {
 
     private final Playing playing;
+
     private final ArrayList<Projectile> projectiles = new ArrayList<>();
     private BufferedImage[] proj_imgs, explore_imgs;
     private int proj_id = 0;
-    private boolean drawExpore;
-    private ArrayList<Explosion> explosions = new ArrayList<>();
+
+    private boolean drawExplore;
+    private final ArrayList<Explosion> explosions = new ArrayList<>();
 
     public ProjectileManager(Playing playing) {
         this.playing = playing;
@@ -29,21 +32,22 @@ public class ProjectileManager {
     }
 
     private void importImgs(){
-        BufferedImage atlas = LoadSave.getSpriteAtlas();
-        proj_imgs = new BufferedImage[3];
+        BufferedImage atlas = LoadSave.getSpriteByName("projectiles", 4);
+        proj_imgs = new BufferedImage[4];
 
-        for (int i=0; i < 3; i++){
-            proj_imgs[i] = atlas.getSubimage((7+i) * 32, 32, 32, 32);
+        for (int i=0; i < 4; i++){
+            assert atlas != null;
+            proj_imgs[i] = atlas.getSubimage(i * 32, 0, 32, 32);
         }
 
-        importExplotion(atlas);
+        importExplosion(atlas);
     }
 
-    private void importExplotion(BufferedImage atlas) {
+    private void importExplosion(BufferedImage atlas) {
         explore_imgs = new BufferedImage[7];
 
         for(int i=0; i<7; i++){
-            explore_imgs[i] = atlas.getSubimage(i*32, 32 * 2, 32, 32);
+            explore_imgs[i] = atlas.getSubimage((i+4) *32, 0, 32, 32);
         }
     }
 
@@ -55,7 +59,6 @@ public class ProjectileManager {
         int totalDis = Math.abs(xDis) + Math.abs(yDis);
 
         float xPercent = (float)Math.abs(xDis) / totalDis;
-
         float xSpeed = xPercent * helpz.Constants.Projectile.getSpeed(type);
         float ySpeed = helpz.Constants.Projectile.getSpeed(type) - xSpeed;
 
@@ -67,16 +70,20 @@ public class ProjectileManager {
         }
 
         float angle = 0;
-
-        if (type == ARROW){
+        if (type == KUNAI || type == FIRE){
             float atanValue = (float)Math.atan(yDis/(float)xDis);
             angle = (float)Math.toDegrees(atanValue);
             if (xDis < 0){
                 angle += 180;
             }
         }
-
-
+        else if (type == SLASH){
+            float atanValue = (float)Math.atan(yDis/(float)xDis);
+            angle = (float)Math.toDegrees(atanValue);
+            if (yDis < 0 || xDis > 0){
+                angle += 180;
+            }
+        }
 
         projectiles.add(new Projectile(t.getX() + 16, t.getY() + 16, xSpeed, ySpeed, t.getDmg(), angle, proj_id++, type));
     }
@@ -87,7 +94,7 @@ public class ProjectileManager {
                 p.move();
                 if (isProjectileHit(p)){
                     p.setActive(false);
-                    if (p.getProjectileType() == BOMB){
+                    if (p.getProjectileType() == FIRE){
                         explosions.add(new Explosion(p.getPos()));
                         kaboomNearEnemies(p);
                     }
@@ -95,17 +102,15 @@ public class ProjectileManager {
                     p.setActive(false);
                 } else if (p.getPos().y <= 0 || p.getPos().y > 640){
                     p.setActive(false);
-                } else {
-                    //do nothing
                 }
             }
         }
 
-        for (Explosion e:explosions){
-            if (e.getExploreId() < 7){
-                e.update();
-            }
+        explosions.removeIf(Explosion::isFinished);
+        for(Explosion e:explosions){
+            e.update();
         }
+        drawExplore = !explosions.isEmpty();
     }
 
     private void kaboomNearEnemies(Projectile p) {
@@ -121,6 +126,7 @@ public class ProjectileManager {
                 }
             }
         }
+        drawExplore = true;
     }
 
     private boolean isProjectileHit(Projectile p) {
@@ -145,7 +151,7 @@ public class ProjectileManager {
 
         for (Projectile p:projectiles){
             if (p.isActive()){
-                if (p.getProjectileType() == ARROW){
+                if (p.getProjectileType() != CHAINS){
                     g2d.translate(p.getPos().x, p.getPos().y);
                     g2d.rotate(Math.toRadians(p.getAngle()));
                     g2d.drawImage(proj_imgs[p.getProjectileType()], -16, -16, null);
@@ -154,15 +160,14 @@ public class ProjectileManager {
                 } else {
                     g2d.drawImage(proj_imgs[p.getProjectileType()], (int)p.getPos().x  -16, (int)p.getPos().y  -16, null);
                 }
-            } else {
-                //do nothing
             }
         }
-
         drawExploreAnim(g2d);
     }
 
     private void drawExploreAnim(Graphics2D g2d) {
+        if (!drawExplore) return;
+
         for (Explosion e:explosions){
             if (e.getExploreId() < 7){
                 g2d.drawImage(explore_imgs[e.getExploreId()], (int)e.getPos().x - 16, (int)e.getPos().y - 16, null);
@@ -171,20 +176,23 @@ public class ProjectileManager {
     }
 
     private int getProjType(Tower t){
-        switch (t.getTowerType()){
-            case ARCHER:
-                return ARROW;
-            case WIZARD:
-                return CHAINS;
-            case CANNON:
-                return BOMB;
-        }
-        return 0;
+        return switch (t.getTowerType()) {
+                case DARK_NINJA -> KUNAI;
+                case YELLOW_NINJA -> KUNAI;
+                case RED_NINJA -> KUNAI;
+                case FLAMIE -> FIRE;
+                case KNIGHT -> SLASH;
+                case SAMURAI -> SLASH;
+                case ORANGE_SORCERER -> CHAINS;
+                case RED_SORCERER -> CHAINS;
+                default -> 0;
+            };
     }
 
     public class Explosion{
-        private Point2D.Float pos;
+        private final Point2D.Float pos;
         private int exploreTick = 0, exploreId = 0;
+        private boolean finished = false;
 
         public Explosion(Point2D.Float pos) {
             this.pos = pos;
@@ -197,7 +205,8 @@ public class ProjectileManager {
                 exploreId++;
                 if (exploreId >= 7){
                     exploreId = 0;
-                    drawExpore = false;
+                    finished = true;
+                    drawExplore = false;
                 }
             }
         }
@@ -208,6 +217,10 @@ public class ProjectileManager {
 
         public int getExploreId() {
             return exploreId;
+        }
+
+        public boolean isFinished(){
+            return finished;
         }
     }
 }

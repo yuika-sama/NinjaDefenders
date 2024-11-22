@@ -1,0 +1,10 @@
+green slime: máu trung bình, tốc độ trung bình, không có hiệu ứng đặc biệt
+big green slime: máu trâu 1.5x dark green slime, , tốc độ chậm 0.8x, không có hiệu ứng đặc biệt
+dark green slime: máu trung bình(cao hơn green slime một chút), tốc độ trung bình(cao hơn green slime một chút), không có hiệu ứng đặc biệt
+lava slime: máu trung bình(ngang dark green slime), tốc độ nhanh 1.2x, khi chết sẽ tăng tốc cho đồng minh quái vật
+pink slime: máu trung bình, tốc độ trung bình, khi giết pink slime sẽ giảm sát thương của trụ giết nó 0.8x
+toxic slime: máu trung bình(ngang dark green slime), tốc độ trung bình, khi chết sẽ hồi máu cho đồng minh xung quanh range = 1
+king slime: máu trâu 2x green slime, tốc độ trung bình(ngang dark green slime), khi chết sẽ tăng máu(1.1x-1.2x) và tăng tốc độ(1.1x-1.2x)(random) cho đồng minh xung quanh range = 2
+
+mushroom man: máu thấp 0.8x green slime, tốc độ trung bình(cao hơn dark green slime một chút), chết sẽ gây sát thương cho quái vật xung quanh range = 1
+goblin: máu trâu 1.6x green slime, tốc độ nhanh 1.3x, khi chết sẽ rớt nhiều tiền hơn

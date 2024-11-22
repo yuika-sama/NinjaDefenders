@@ -1,0 +1,12 @@
+dark ninja: bố của trung bình
+yellow ninja: range xa hơn, tốc độ nhanh hơn 1 chút
+red ninja: range xa hơn, sát thương cao hơn, tốc độ nhanh hơn 2 chút
+
+flame: bắn ra lửa nổ bùm bùm, sát thương cao hơn dark ninja một chút, nhưng mà có tính area
+knight: sát thương chém, range ngắn
+samurai: sát thương chém cao hơn knight, range cao hơn 1 chút, tốc độ chậm hơn knight
+
+orange soccerrer: sát thương gần như bằng 0, làm chậm, range thấp
+red soccerer: sát thương thấp 0.5x dark ninja, làm chậm, range cao hơn
+
+kaboom robot: đặt xuống, clear quái vật trong range bằng 1 vụ nổ, rồi biến mất, giá cao

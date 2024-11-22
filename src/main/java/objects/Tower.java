@@ -2,8 +2,19 @@ package objects;
 
 import helpz.Constants;
 
+import static helpz.Constants.Direction.*;
+
 public class Tower {
-    private int x, y, id, towerType, cdTick, dmg;
+    private final int x;
+    private final int y;
+    private final int id;
+    private final int towerType;
+    private int cdTick;
+    private int dmg;
+
+    private int direction = DOWN;
+    private boolean attacking = false;
+    private int animIndex, animTick = 0;
 
     private float range, cd;
 
@@ -19,19 +30,32 @@ public class Tower {
     }
 
     private void setDefaultCoolDown() {
-        cd = Constants.Towers.getDefaultCoolDown(towerType);
+        cd = Constants.Turrets.getDefaultCoolDown(towerType) * 25;
     }
 
     private void setDefaultRange() {
-        range = Constants.Towers.getDefaultRange(towerType);
+        range = Constants.Turrets.getDefaultRange(towerType);
     }
 
     private void setDefaultDamage() {
-        dmg = Constants.Towers.getStartDmg(towerType);
+        dmg = Constants.Turrets.getStartDmg(towerType);
     }
 
-    public void update(){
+    public void update() {
+        animTick++;
         cdTick++;
+        int animSpeed = attacking ? 20 : 6;
+
+        if (animTick >= animSpeed) {
+            animTick = 0;
+            animIndex++;
+
+            if (attacking) {
+                animIndex %= 4;
+            } else {
+                animIndex %= 4;
+            }
+        }
     }
 
     public boolean isCooldownOver() {
@@ -68,5 +92,29 @@ public class Tower {
 
     public float getCd() {
         return cd;
+    }
+
+    public boolean isAttacking() {
+        return attacking;
+    }
+
+    public Integer getDirection() {
+        return direction;
+    }
+
+    public int getAnimIndex() {
+        return animIndex;
+    }
+
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
+    }
+
+    public void setDirection(int dir) {
+        this.direction = dir;
+    }
+
+    public boolean getState(){
+        return attacking;
     }
 }

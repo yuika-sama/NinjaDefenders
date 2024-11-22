@@ -4,8 +4,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class ImgFix {
-    //Rotate
-
     public static BufferedImage getRotImg(BufferedImage img, int rotAngle) {
         int w = img.getWidth();
         int h = img.getHeight();
@@ -13,7 +11,7 @@ public class ImgFix {
         BufferedImage new_img = new BufferedImage(w, h, img.getType());
         Graphics2D g2d = new_img.createGraphics();
 
-        g2d.rotate(Math.toRadians(rotAngle), w / 2, h / 2);
+        g2d.rotate(Math.toRadians(rotAngle), (double) w / 2, (double) h / 2);
         g2d.drawImage(img, 0, 0, null);
         g2d.dispose();
 
@@ -43,11 +41,11 @@ public class ImgFix {
 
         for (int i = 0; i < imgs.length; i++) {
             if (rotAtIndex == i) {
-                g2d.rotate(Math.toRadians(rotAngle), w / 2, h / 2);
+                g2d.rotate(Math.toRadians(rotAngle), (double) w / 2, (double) h / 2);
             }
             g2d.drawImage(imgs[i], 0, 0, null);
             if (rotAtIndex == i) {
-                g2d.rotate(Math.toRadians(-rotAngle), w / 2, h / 2);
+                g2d.rotate(Math.toRadians(-rotAngle), (double) w / 2, (double) h / 2);
             }
         }
 
@@ -62,18 +60,15 @@ public class ImgFix {
 
         BufferedImage[] arr = new BufferedImage[imgs.length];
 
-        for (int i=0; i<imgs.length; i++){
+        for (int i = 0; i < imgs.length; i++) {
             BufferedImage new_img = new BufferedImage(w, h, imgs[0].getType());
             Graphics2D g2d = new_img.createGraphics();
             g2d.drawImage(imgs[i], 0, 0, null);
-            g2d.rotate(Math.toRadians(rotAngle), w / 2, h / 2);
+            g2d.rotate(Math.toRadians(rotAngle), (double) w / 2, (double) h / 2);
             g2d.drawImage(secondImg, 0, 0, null);
             g2d.dispose();
             arr[i] = new_img;
         }
         return arr;
     }
-
-
-    //Image Layer Build
 }

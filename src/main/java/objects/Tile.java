@@ -1,13 +1,12 @@
 package objects;
 
-import helpz.Constants;
-
 import java.awt.image.BufferedImage;
 
 public class Tile {
-    private BufferedImage sprite[];
+    private final BufferedImage[] sprite;
     private final int id;
-    private int tileType;
+    private final int tileType;
+
     public Tile(BufferedImage sprite, int id, int tileType) {
         this.sprite = new BufferedImage[1];
         this.sprite[0] = sprite;

@@ -30,7 +30,7 @@ public class GameMenu extends GameScene implements SceneMethods {
     private void initButtons() {
         int w = 150;
         int h = w / 3;
-        int x = 640 / 2 - w / 2;
+        int x = 800 / 2 - w / 2;
         int y = 150;
         int yOffset = 100;
         bPlaying = new MyButton("Play", x, y, w, h);
@@ -81,7 +81,9 @@ public class GameMenu extends GameScene implements SceneMethods {
             bSetting.setMousePressed(true);
         } else if (bQuit.getBounds().contains(x, y)) {
             bQuit.setMousePressed(true);
-        } else if (bEdit.getBounds().contains(x, y)) ;
+        } else if (bEdit.getBounds().contains(x, y)){
+            bEdit.setMousePressed(true);
+        }
     }
 
     @Override
@@ -123,6 +125,7 @@ public class GameMenu extends GameScene implements SceneMethods {
     private void importImg() {
         InputStream is = getClass().getResourceAsStream("/spriteatlas.png");
         try {
+            assert is != null;
             img = ImageIO.read(is);
         } catch (IOException e) {
             throw new RuntimeException(e);

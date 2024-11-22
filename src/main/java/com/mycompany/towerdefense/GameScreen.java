@@ -8,9 +8,6 @@ import java.awt.*;
 
 public class GameScreen extends JPanel {
     private final Game game;
-    private Dimension dms;
-    private MyMouseListener myMouseListener;
-    private MyKeyboardListener myKeyboardListener;
 
     public GameScreen(Game game) {
         this.game = game;
@@ -18,15 +15,15 @@ public class GameScreen extends JPanel {
     }
 
     private void setPanelSize() {
-        dms = new Dimension(640, 800);
+        Dimension dms = new Dimension(800, 640);
         setMinimumSize(dms);
         setPreferredSize(dms);
         setMaximumSize(dms);
     }
 
     public void initInput() {
-        myMouseListener = new MyMouseListener(game);
-        myKeyboardListener = new MyKeyboardListener(game);
+        MyMouseListener myMouseListener = new MyMouseListener(game);
+        MyKeyboardListener myKeyboardListener = new MyKeyboardListener(game);
 
         addMouseListener(myMouseListener);
         addMouseMotionListener(myMouseListener);
@@ -40,6 +37,4 @@ public class GameScreen extends JPanel {
         super.paintComponent(g);
         game.getRender().render(g);
     }
-
-
 }

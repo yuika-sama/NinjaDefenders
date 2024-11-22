@@ -1,14 +1,16 @@
 package objects;
 
-import enemies.Enemy;
-
 import java.awt.geom.Point2D;
 
 public class Projectile {
     private Point2D.Float pos;
-    private int id, dmg, projectileType;
+    private final int id;
+    private final int dmg;
+    private final int projectileType;
     private boolean active = true;
-    private float xSpeed, ySpeed, angle;
+    private final float xSpeed;
+    private final float ySpeed;
+    private final float angle;
 
 
     public Projectile(float x, float y, float xSpeed, float ySpeed, int dmg, float angle, int id, int projectileType){
