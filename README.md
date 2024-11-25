@@ -1,3 +1,6 @@
+Ninja Defenders
+![Alt text](src/main/resources/gameIcon.png)
+
 How to run:
 - Import the project into Apache NetBeans or Intelliji
 - Run main.java in ```java\src\core```
