@@ -1,9 +1,9 @@
 package managers;
 
-import enemies.Enemy;
-import helpz.LoadSave;
-import objects.Projectile;
-import objects.Tower;
+import entities.enemies.Enemy;
+import utilities.LoadSave;
+import entities.objects.Projectile;
+import entities.objects.Tower;
 import scenes.Playing;
 
 import java.awt.*;
@@ -11,9 +11,8 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import static helpz.Constants.Direction.*;
-import static helpz.Constants.Projectile.*;
-import static helpz.Constants.Turrets.*;
+import static utilities.Constants.Projectile.*;
+import static utilities.Constants.Turrets.*;
 
 public class ProjectileManager {
 
@@ -59,8 +58,8 @@ public class ProjectileManager {
         int totalDis = Math.abs(xDis) + Math.abs(yDis);
 
         float xPercent = (float)Math.abs(xDis) / totalDis;
-        float xSpeed = xPercent * helpz.Constants.Projectile.getSpeed(type);
-        float ySpeed = helpz.Constants.Projectile.getSpeed(type) - xSpeed;
+        float xSpeed = xPercent * utilities.Constants.Projectile.getSpeed(type);
+        float ySpeed = utilities.Constants.Projectile.getSpeed(type) - xSpeed;
 
         if (t.getX() > e.getX()){
             xSpeed *= -1;
@@ -82,6 +81,15 @@ public class ProjectileManager {
             angle = (float)Math.toDegrees(atanValue);
             if (yDis < 0 || xDis > 0){
                 angle += 180;
+            }
+        }
+
+        for (Projectile p:projectiles){
+            if (!p.isActive()){
+                if (p.getProjectileType() == type){
+                    p.reUse(t.getX() + 16, t.getY() + 16, xSpeed, ySpeed, t.getDmg(), angle);
+                    return;
+                }
             }
         }
 
@@ -222,5 +230,10 @@ public class ProjectileManager {
         public boolean isFinished(){
             return finished;
         }
+    }
+    public void reset(){
+        projectiles.clear();
+        explosions.clear();
+        proj_id = 0;
     }
 }

@@ -1,9 +1,9 @@
 package managers;
 
-import enemies.Enemy;
-import helpz.Constants;
-import helpz.LoadSave;
-import objects.Tower;
+import entities.enemies.Enemy;
+import utilities.Constants;
+import utilities.LoadSave;
+import entities.objects.Tower;
 import scenes.Playing;
 
 import java.awt.*;
@@ -13,31 +13,30 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static helpz.Constants.Direction.*;
-import static helpz.Constants.Action.*;
-import static helpz.Constants.Turrets.*;
+import static utilities.Constants.Action.ATTACK;
+import static utilities.Constants.Action.IDLE;
+import static utilities.Constants.Direction.*;
+import static utilities.Constants.Turrets.DARK_NINJA;
 
 public class TowerManager {
     private final Playing playing;
-    private BufferedImage[] towerImgs;
     private final ArrayList<Tower> towers = new ArrayList<>();
     private final BufferedImage[] towerFaceset = new BufferedImage[9];
     private final BufferedImage[] towerFirstSprite = new BufferedImage[9];
-    private int id = 0;
-
     //Name, Actions, Direction, Images
     private final Map<String, Map<Integer, Map<Integer, BufferedImage[]>>> towerAnim = new HashMap<>();
+    private BufferedImage[] towerImgs;
+    private int id = 0;
 
     public TowerManager(Playing playing) {
         this.playing = playing;
-        
+
         loadTowerImgs();
         loadTowerAnim();
-        addTower(new Tower(32, 32*3, 0, DARK_NINJA), 32, 32*3);
     }
 
     private void loadTowerAnim() {
-        for (int i = 0; i<8; i++){
+        for (int i = 0; i < 8; i++) {
             String towerName = Constants.Turrets.getName(i);
             towerAnim.putIfAbsent(towerName, new HashMap<>());
             BufferedImage[] animLoad = LoadSave.loadAnimFrames(towerImgs[i], 3);
@@ -64,7 +63,7 @@ public class TowerManager {
 
     private void loadTowerImgs() {
         towerImgs = new BufferedImage[8];
-        for (int i=0; i<8; i++){
+        for (int i = 0; i < 8; i++) {
             towerImgs[i] = LoadSave.getSpriteByName(Constants.Turrets.getSpriteName(i), 3);
         }
     }
@@ -137,16 +136,17 @@ public class TowerManager {
         towers.add(new Tower(mouseX, mouseY, id++, selectedTower.getTowerType()));
     }
 
-    public BufferedImage[] getTowerImgs(){
+    public BufferedImage[] getTowerImgs() {
         return towerFaceset;
     }
 
-    public BufferedImage[] getTowerFirstSprite(){
+    public BufferedImage[] getTowerFirstSprite() {
         return towerFirstSprite;
     }
+
     public Tower getTowerAt(int mouseX, int mouseY) {
-        for (Tower t:towers){
-            if (t.getX() == mouseX && t.getY() == mouseY){
+        for (Tower t : towers) {
+            if (t.getX() == mouseX && t.getY() == mouseY) {
                 return t;
             }
         }
@@ -154,18 +154,23 @@ public class TowerManager {
     }
 
     public void removeTower(Tower displayTower) {
-        for (int i = 0; i<towers.size(); i++){
-            if (towers.get(i).getId() == displayTower.getId()){
+        for (int i = 0; i < towers.size(); i++) {
+            if (towers.get(i).getId() == displayTower.getId()) {
                 towers.remove(i);
             }
         }
     }
 
     public void upgradeTower(Tower displayTower) {
-        for (Tower t:towers){
-            if (t.getId() == displayTower.getId()){
+        for (Tower t : towers) {
+            if (t.getId() == displayTower.getId()) {
                 t.upgradeTower();
             }
         }
+    }
+
+    public void reset(){
+        towers.clear();
+        id = 0;
     }
 }

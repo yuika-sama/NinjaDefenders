@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class MyButton {
 
-    private final String text;
+    private String text;
     public int x, y, width, height, id;
     private Rectangle bounds;
     private boolean mouseOver, mousePressed;
@@ -107,4 +107,7 @@ public class MyButton {
         this.mousePressed = mousePressed;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
 }

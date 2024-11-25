@@ -1,9 +1,9 @@
 package scenes;
 
-import com.mycompany.towerdefense.Game;
-import helpz.LoadSave;
-import objects.PathPoint;
-import objects.Tile;
+import core.Game;
+import utilities.LoadSave;
+import entities.objects.PathPoint;
+import entities.objects.Tile;
 import ui.ToolBar;
 
 import java.awt.*;
@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import static helpz.Constants.Tiles.ROAD_TILE;
+import static utilities.Constants.Tiles.ROAD_TILE;
 
 public class Editing extends GameScene implements SceneMethods {
     private final ToolBar toolBar;

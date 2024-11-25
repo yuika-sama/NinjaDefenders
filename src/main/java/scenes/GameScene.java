@@ -1,6 +1,6 @@
 package scenes;
 
-import com.mycompany.towerdefense.Game;
+import core.Game;
 
 public class GameScene {
     private final Game game;

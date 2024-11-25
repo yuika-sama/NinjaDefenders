@@ -1,7 +1,7 @@
 package ui;
 
-import helpz.LoadSave;
-import objects.Tile;
+import utilities.LoadSave;
+import entities.objects.Tile;
 import scenes.Editing;
 
 import java.awt.*;
@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.mycompany.towerdefense.GameState.MENU;
-import static com.mycompany.towerdefense.GameState.setGameStates;
+import static core.GameState.MENU;
+import static core.GameState.setGameStates;
 
 public class ToolBar extends Bar {
     private final Editing editing;

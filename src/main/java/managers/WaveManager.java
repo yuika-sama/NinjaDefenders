@@ -5,6 +5,7 @@ import scenes.Playing;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class WaveManager {
     private Playing playing;
@@ -55,9 +56,18 @@ public class WaveManager {
     }
 
     private void createWaves() {
-        waves.add(new Wave(new ArrayList<Integer>(Arrays.asList(4,1,1,1,1,1,1,1,2,3))));
-        waves.add(new Wave(new ArrayList<Integer>(Arrays.asList(4,1,6,1,1,1,1, 0,2,3))));
-        waves.add(new Wave(new ArrayList<Integer>(Arrays.asList(4,1,0,1,2,1, 7,1,2,3))));
+        Random random = new Random();
+        int numWaves = random.nextInt(5) + 1;
+        for (int i = 0; i < numWaves; i++) {
+            int waveLength = random.nextInt(9) + 5;
+            ArrayList<Integer> waveData = new ArrayList<>();
+
+            for (int j = 0; j < waveLength; j++) {
+                int maxValue = Math.min(7, 2 + i / 3);
+                waveData.add(random.nextInt(maxValue + 1));
+            }
+            waves.add(new Wave(waveData));
+        }
     }
 
     public ArrayList<Wave> getWaves() {
@@ -76,6 +86,7 @@ public class WaveManager {
         return waveIndex + 1 < waves.size();
     }
 
+
     public void resetEnemiesIndex() {
         enemyIndex = 0;
     }
@@ -91,5 +102,16 @@ public class WaveManager {
 
     public boolean isWaveTimerStarted() {
         return waveStartTimer;
+    }
+
+    public void reset(){
+        waves.clear();
+        createWaves();
+        enemyIndex = 0;
+        waveIndex = 0;
+        waveTick = 0;
+        waveStartTimer = false;
+        waveTickTimerOver = false;
+        spawnTick = spawnTickLimit;
     }
 }

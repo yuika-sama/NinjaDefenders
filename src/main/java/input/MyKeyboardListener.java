@@ -1,19 +1,17 @@
 package input;
 
-import com.mycompany.towerdefense.Game;
-import com.mycompany.towerdefense.GameState;
+import core.Game;
+import core.GameState;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import static com.mycompany.towerdefense.GameState.EDIT;
+import static core.GameState.EDIT;
 
 public class MyKeyboardListener implements KeyListener {
 
-    private final Game game;
-
     public MyKeyboardListener(Game game) {
-        this.game = game;
+
     }
 
     @Override
@@ -22,9 +20,7 @@ public class MyKeyboardListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (GameState.gameStates == EDIT) {
-            //do nothing
-        }
+
     }
 
     @Override

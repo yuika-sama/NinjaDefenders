@@ -1,12 +1,12 @@
 package scenes;
 
-import com.mycompany.towerdefense.Game;
+import core.Game;
 import ui.MyButton;
 
 import java.awt.*;
 
-import static com.mycompany.towerdefense.GameState.MENU;
-import static com.mycompany.towerdefense.GameState.setGameStates;
+import static core.GameState.MENU;
+import static core.GameState.setGameStates;
 
 public class Setting extends GameScene implements SceneMethods {
     private MyButton bMenu;

@@ -1,13 +1,13 @@
 package managers;
 
-import helpz.ImgFix;
-import helpz.LoadSave;
-import objects.Tile;
+import utilities.ImgFix;
+import utilities.LoadSave;
+import entities.objects.Tile;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import static helpz.Constants.Tiles.*;
+import static utilities.Constants.Tiles.*;
 
 
 public class TileManager {
@@ -89,6 +89,20 @@ public class TileManager {
             arr[i] = getSprite(xCord + i, yCord);
         }
         return arr;
+    }
+
+    public int[][] getTileArr(){
+        int[][] idArr = LoadSave.GetLevelData("new_level");
+        int[][] typeArr = new int[idArr.length][idArr[0].length];
+
+		for (int j = 0; j < idArr.length; j++) {
+			for (int i = 0; i < idArr[j].length; i++) {
+				int id = idArr[j][i];
+				typeArr[j][i] = tiles.get(id).getTileType();
+			}
+		}
+
+		return typeArr;
     }
 
     private BufferedImage getSprite(int xCord, int yCord) {

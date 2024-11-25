@@ -1,15 +1,16 @@
 package scenes;
 
-import com.mycompany.towerdefense.Game;
-import enemies.Enemy;
-import helpz.Constants;
-import helpz.LoadSave;
+import core.Game;
+import core.GameState;
+import entities.enemies.Enemy;
+import utilities.Constants;
+import utilities.LoadSave;
 import managers.EnemyManager;
 import managers.ProjectileManager;
 import managers.TowerManager;
 import managers.WaveManager;
-import objects.PathPoint;
-import objects.Tower;
+import entities.objects.PathPoint;
+import entities.objects.Tower;
 import ui.ActionBar;
 
 import java.awt.*;
@@ -17,7 +18,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import static helpz.Constants.Tiles.GRASS_TILE;
+import static utilities.Constants.Tiles.GRASS_TILE;
 
 public class Playing extends GameScene implements SceneMethods {
     private final TowerManager towerManager;
@@ -26,15 +27,16 @@ public class Playing extends GameScene implements SceneMethods {
     private final WaveManager waveManager;
     private final ActionBar actionBar;
     private final Game game;
-    private final ArrayList<Tower> towers = new ArrayList<>();
     private Tower selectedTower;
     private int[][] lvl;
     private int mouseX, mouseY;
     private int animId;
     private int tick;
     private PathPoint start, end;
-    private boolean drawSelected;
-    private int goldTick=0;
+    private int goldTick = 0;
+    private boolean gamePaused;
+
+    private int life = 10;
 
     public Playing(Game game) {
         super(game);
@@ -60,33 +62,37 @@ public class Playing extends GameScene implements SceneMethods {
     }
 
     public void update() {
-        updateTick();
-        waveManager.update();
+        if (!gamePaused) {
+            updateTick();
+            waveManager.update();
 
-        goldTick++;
-        if (goldTick % (60*3) == 0){
-            actionBar.addGold(1);
-        }
+            goldTick++;
+            if (goldTick % (60 * 3) == 0) {
+                actionBar.addGold(1);
+            }
 
-
-        if (isWaveCleared()){
-            if (isMoreWaves()){
-                waveManager.startWaveTimer();
-                if (isWaveTimerOver()){
-                    waveManager.increaseWaveIndex();
-                    enemyManager.getEnemies().clear();
-                    waveManager.resetEnemiesIndex();
+            if (isWaveCleared()) {
+                if (isMoreWaves()) {
+                    waveManager.startWaveTimer();
+                    if (isWaveTimerOver()) {
+                        waveManager.increaseWaveIndex();
+                        enemyManager.getEnemies().clear();
+                        waveManager.resetEnemiesIndex();
+                    }
+                } else {
+                    GameState.setGameStates(GameState.VICTORY);
+                    return;
                 }
             }
-        }
 
-        if (isTimeForNewEnemy()){
-            spawnEnemies();
-        }
+            if (isTimeForNewEnemy()) {
+                spawnEnemies();
+            }
 
-        enemyManager.update();
-        towerManager.update();
-        projectileManager.update();
+            enemyManager.update();
+            towerManager.update();
+            projectileManager.update();
+        }
     }
 
     private boolean isWaveTimerOver() {
@@ -98,12 +104,12 @@ public class Playing extends GameScene implements SceneMethods {
     }
 
     private boolean isWaveCleared() {
-        if (waveManager.isWaveNotEmpty()){
+        if (waveManager.isWaveNotEmpty()) {
             return false;
         }
 
-        for (Enemy e:enemyManager.getEnemies()){
-            if (e.isAlive()){
+        for (Enemy e : enemyManager.getEnemies()) {
+            if (e.isAlive()) {
                 return false;
             }
         }
@@ -115,10 +121,8 @@ public class Playing extends GameScene implements SceneMethods {
     }
 
     private boolean isTimeForNewEnemy() {
-        if (waveManager.isTimeForNewEnemy()){
-            if (waveManager.isWaveNotEmpty()){
-                return true;
-            }
+        if (waveManager.isTimeForNewEnemy()) {
+            return waveManager.isWaveNotEmpty();
         }
         return false;
     }
@@ -133,7 +137,41 @@ public class Playing extends GameScene implements SceneMethods {
         projectileManager.draw(g);
         drawSelectedTower(g);
         drawHighLight(g);
+        drawLife(g);
 
+        if (isGamePaused()) {
+            drawPauseStatus(g);
+        }
+    }
+
+    private void drawLife(Graphics g) {
+        String text = "Life: " + this.life;
+        FontMetrics metrics = g.getFontMetrics();
+        int textWidth = metrics.stringWidth(text); // Get the width of the text
+        int textHeight = metrics.getHeight();      // Get the height of the text
+        int x = 5;                                 // X-coordinate for text and rectangle
+        int y = 20;                                // Y-coordinate for baseline of the text
+        int padding = 4;                           // Padding around the text
+
+        // Draw the rectangle (background)
+        g.setColor(Color.BLACK);              // Background color
+        g.fillRect(x - padding, y - textHeight + padding, textWidth + 2 * padding, textHeight);
+        g.setColor(Color.GRAY);
+        g.fillRect(0, y - textHeight + padding - 1, textWidth + 2 * padding - 2, textHeight - 2);
+
+        // Draw the text
+        g.setColor(Color.BLACK);                   // Text color
+        g.drawString(text, x, y);
+    }
+
+    private void drawPauseStatus(Graphics g) {
+        g.setColor(Color.gray);
+        g.fillRect(320 - 80, 320 - 25, 160, 50);
+        g.setColor(Color.BLACK);
+        g.drawRect(320 - 80 - 1, 320 - 25 - 1, 161, 51);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("LucidaSans", Font.BOLD, 16));
+        g.drawString("Game Paused!!!", 320 - 80 + 20, 320 + 5);
     }
 
     private void drawHighLight(Graphics g) {
@@ -221,9 +259,9 @@ public class Playing extends GameScene implements SceneMethods {
                 if (isGrass(mouseX, mouseY)) {
                     if (getTowerAt(mouseX, mouseY) == null) {
                         towerManager.addTower(selectedTower, mouseX, mouseY);
-                        
+
                         removeGold(selectedTower.getTowerType());
-                        
+
                         selectedTower = null;
                     }
                 }
@@ -289,7 +327,7 @@ public class Playing extends GameScene implements SceneMethods {
         return waveManager;
     }
 
-    public void rewardPlayer(int enemyType){
+    public void rewardPlayer(int enemyType) {
         actionBar.addGold(Constants.Monsters.getReward(enemyType));
 
     }
@@ -300,5 +338,38 @@ public class Playing extends GameScene implements SceneMethods {
 
     public void upgradeTower(Tower displayTower) {
         towerManager.upgradeTower(displayTower);
+    }
+
+    public boolean isGamePaused() {
+        return gamePaused;
+    }
+
+    public void setGamePaused(boolean gamePaused) {
+        this.gamePaused = gamePaused;
+    }
+
+    public void removeLife() {
+        this.life--;
+        if (life <= 0) {
+            GameState.setGameStates(GameState.GAME_OVER);
+        }
+    }
+
+    public void hardReset() {
+        life = 25;
+
+        actionBar.hardReset();
+
+        enemyManager.reset();
+        towerManager.reset();
+        projectileManager.reset();
+        waveManager.reset();
+
+        mouseX = 0;
+        mouseY = 0;
+
+        selectedTower = null;
+        goldTick = 0;
+        gamePaused = false;
     }
 }

@@ -1,6 +1,6 @@
 package scenes;
 
-import com.mycompany.towerdefense.Game;
+import core.Game;
 import ui.MyButton;
 
 import javax.imageio.ImageIO;
@@ -11,12 +11,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static com.mycompany.towerdefense.GameState.*;
+import static core.GameState.*;
 
 public class GameMenu extends GameScene implements SceneMethods {
     private final ArrayList<BufferedImage> sprites = new ArrayList<>();
     private final Random random;
-    private BufferedImage img;
+    private BufferedImage img, background;
     private MyButton bPlaying, bSetting, bEdit, bQuit;
 
     public GameMenu(Game game) {
@@ -35,12 +35,13 @@ public class GameMenu extends GameScene implements SceneMethods {
         int yOffset = 100;
         bPlaying = new MyButton("Play", x, y, w, h);
         bEdit = new MyButton("Edit", x, y + yOffset, w, h);
-        bSetting = new MyButton("Setting", x, y + yOffset * 2, w, h);
-        bQuit = new MyButton("Quit", x, y + yOffset * 3, w, h);
+//        bSetting = new MyButton("Setting", x, y + yOffset * 2, w, h);
+        bQuit = new MyButton("Quit", x, y + yOffset * 2, w, h);
     }
 
     @Override
     public void render(Graphics g) {
+        g.drawImage(background, 0,0,null);
         drawButton(g);
     }
 
@@ -48,8 +49,10 @@ public class GameMenu extends GameScene implements SceneMethods {
     public void mouseClicked(int x, int y) {
         if (bPlaying.getBounds().contains(x, y)) {
             setGameStates(PLAYING);
-        } else if (bSetting.getBounds().contains(x, y)) {
-            setGameStates(SETTING);
+//        } else if (bSetting.getBounds().contains(x, y)) {
+//            setGameStates(SETTING);
+            //this will navigate to setting game scene, but i did not complete it yet sr
+//            System.out.println("Clicked setting button");
         } else if (bQuit.getBounds().contains(x, y)) {
             System.exit(0);
         } else if (bEdit.getBounds().contains(x, y)) {
@@ -60,12 +63,12 @@ public class GameMenu extends GameScene implements SceneMethods {
     public void mouseMoved(int x, int y) {
         bPlaying.setMouseOver(false);
         bEdit.setMouseOver(false);
-        bSetting.setMouseOver(false);
+//        bSetting.setMouseOver(false);
         bQuit.setMouseOver(false);
         if (bPlaying.getBounds().contains(x, y)) {
             bPlaying.setMouseOver(true);
-        } else if (bSetting.getBounds().contains(x, y)) {
-            bSetting.setMouseOver(true);
+//        } else if (bSetting.getBounds().contains(x, y)) {
+//            bSetting.setMouseOver(true);
         } else if (bQuit.getBounds().contains(x, y)) {
             bQuit.setMouseOver(true);
         } else if (bEdit.getBounds().contains(x, y)) {
@@ -77,8 +80,8 @@ public class GameMenu extends GameScene implements SceneMethods {
     public void mousePressed(int x, int y) {
         if (bPlaying.getBounds().contains(x, y)) {
             bPlaying.setMousePressed(true);
-        } else if (bSetting.getBounds().contains(x, y)) {
-            bSetting.setMousePressed(true);
+//        } else if (bSetting.getBounds().contains(x, y)) {
+//            bSetting.setMousePressed(true);
         } else if (bQuit.getBounds().contains(x, y)) {
             bQuit.setMousePressed(true);
         } else if (bEdit.getBounds().contains(x, y)){
@@ -98,14 +101,14 @@ public class GameMenu extends GameScene implements SceneMethods {
 
     private void resetButtons() {
         bPlaying.resetBooleans();
-        bSetting.resetBooleans();
+//        bSetting.resetBooleans();
         bQuit.resetBooleans();
         bEdit.resetBooleans();
     }
 
     private void drawButton(Graphics g) {
         bPlaying.draw(g);
-        bSetting.draw(g);
+//        bSetting.draw(g);
         bQuit.draw(g);
         bEdit.draw(g);
     }
@@ -127,6 +130,14 @@ public class GameMenu extends GameScene implements SceneMethods {
         try {
             assert is != null;
             img = ImageIO.read(is);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        is = getClass().getResourceAsStream("/background.png");
+        try {
+            assert is != null;
+            background = ImageIO.read(is);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
