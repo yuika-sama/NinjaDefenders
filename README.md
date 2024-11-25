@@ -1,5 +1,5 @@
 How to run:
-- Import the project into Apache NetBeans.
+- Import the project into Apache NetBeans or Intelliji
 - Run main.java in ```java\src\core```
 
 How to play:
