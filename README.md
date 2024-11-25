@@ -1,5 +1,6 @@
 Ninja Defenders
 ![Alt text](src/main/resources/gameIcon.png)
+![Alt text](src/main/resources/background.png)
 
 How to run:
 - Import the project into Apache NetBeans or Intelliji
