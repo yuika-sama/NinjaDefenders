@@ -60,6 +60,10 @@ public class Playing extends GameScene implements SceneMethods {
     public void setLevel(int[][] lvl) {
         this.lvl = lvl;
     }
+    public void setInitPoint(PathPoint start, PathPoint end) {
+        this.start = start;
+        this.end = end;
+    }
 
     public void update() {
         if (!gamePaused) {

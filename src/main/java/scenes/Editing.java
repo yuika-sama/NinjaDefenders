@@ -114,6 +114,7 @@ public class Editing extends GameScene implements SceneMethods {
     public void saveLevel() {
         LoadSave.SaveLevel("new_level", lvl, start, end);
         this.game.getPlaying().setLevel(lvl);
+        this.game.getPlaying().setInitPoint(start, end);
     }
 
     private void changeTile(int x, int y) {
